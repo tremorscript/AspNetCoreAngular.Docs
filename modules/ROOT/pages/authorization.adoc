@@ -8,9 +8,9 @@
 
 There are 3 actors involved when it comes to authentication and authorization.
 
-. The angular application (the client)
-. The webapi (the resource)
-. IdentityServer4 (the Identity Provider also the Secure Token Service)
+. The ClientApp (the client angular app)
+. The Web Project (the resource api)
+. The STS Project (the Identity Provider)
 
 == STS Project
 
@@ -18,7 +18,7 @@ First, we see how the client is configured in the STS project.
 
 In the `ConfigureServices` method of `Startup.cs`, the `AddStsServer` extension method of `IServiceCollection` is called.
 
-[source, cs]
+[source, csharp]
 ----
 public void ConfigureServices(IServiceCollection services)
 {
@@ -41,7 +41,7 @@ Here, the angular client is configured as a valid client with access to the WebA
 
 For now, the clientid and the resource name are the same. Need to change that.
 
-[source,cs]
+[source,csharp]
 ----
 var clientId = client.clientId;
 var host = client.corsOrigin;
@@ -108,7 +108,7 @@ There are two main actors involved:
 
 The `AuthInterceptor` looks for  is quite simple. If it receives a response with status code '401 - Unauthorized', it navigates to the `LoginComponent`.
 
-[source,ts]
+[source,typescript]
 ----
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}
@@ -132,15 +132,59 @@ export class AuthInterceptor implements HttpInterceptor {
 
 The `ngInit` method of the `LoginComponent` checks to see which url was called and calls the appropriate method in `AuthorizeService.ts`.
 
+[source,typescript]
+----
+ngOnInit() {
+  const action = this.activatedRoute.snapshot.url[1];
+  switch (action.path) {
+    case LoginActions.Login:
+      this.login(this.getReturnUrl());
+      break;
+    case LoginActions.LoginCallback:
+      this.processLoginCallback();
+      break;
+    case LoginActions.LoginFailed:
+      const message = this.activatedRoute.snapshot.queryParamMap.get(QueryParameterNames.Message);
+      this.message.next(message);
+      break;
+    case LoginActions.Profile:
+      this.redirectToProfile();
+      break;
+    case LoginActions.Register:
+      this.redirectToRegister();
+      break;
+    default:
+      throw new Error(`Invalid action '${action}'`);
+  }
+}
+----
+
+The `shared.module.ts` file are where the routes for the login actions are defined.
+
+[source, typescript]
+----
+RouterModule.forChild([
+  { path: ApplicationPaths.Register, component: LoginComponent },
+  { path: ApplicationPaths.Profile, component: LoginComponent },
+  { path: ApplicationPaths.Login, component: LoginComponent },
+  { path: ApplicationPaths.LoginFailed, component: LoginComponent },
+  { path: ApplicationPaths.LoginCallback, component: LoginComponent },
+  { path: ApplicationPaths.LogOut, component: LogoutComponent },
+  { path: ApplicationPaths.LoggedOut, component: LogoutComponent },
+  { path: ApplicationPaths.LogOutCallback, component: LogoutComponent },
+]),
+----
 
 
 === AuthorizeService
 
 The `AuthorizeService` is the service class that handles the `IUser` object and general authorization tasks like sign-in and sign-out.
 
+`AuthorizeService` uses the functions provided by the https://www.npmjs.com/package/oidc-client-ts[oidc-client-ts^] library to work with the authorization code flows.
+
 ==== private variables
 
-[source,ts]
+[source,typescript]
 ----
   private _user: IUser; // <1>
   private popUpDisabled = true; // <2>
@@ -156,7 +200,7 @@ The `AuthorizeService` is the service class that handles the `IUser` object and 
 
 This method is called by the `LoginComponent` when the user gets redirected to `authentication/login` by the `AuthInterceptor`.
 
-[source, ts]
+[source, typescript]
 ----
 public async signIn(state: any): Promise<IAuthenticationResult> {
     await this.ensureUserManagerInitialized(); // <1>
@@ -209,7 +253,7 @@ public async signIn(state: any): Promise<IAuthenticationResult> {
 
 This method is called by the `LoginComponent` when the Identity Provider validates the user successfully and calls the login-callback url - `authentication/login-callback`
 
-[source,ts]
+[source,typescript]
 ----
 public async completeSignIn(url: string): Promise<IAuthenticationResult> {
   try {
@@ -232,7 +276,7 @@ public async completeSignIn(url: string): Promise<IAuthenticationResult> {
 
 This method is called by the `LogoutComponent` when the user gets redirected to `authentication/logout`.
 
-[source,ts]
+[source,typescript]
 ----
 public async signOut(state: any): Promise<IAuthenticationResult> {
   try {
@@ -267,7 +311,7 @@ public async signOut(state: any): Promise<IAuthenticationResult> {
 
 This method is called by the `LogoutComponent` when the Identity Provider calls the logout-callback url - `authentication/logout-callback`
 
-[source,ts]
+[source,typescript]
 ----
 public async completeSignOut(url: string): Promise<IAuthenticationResult> {
   await this.ensureUserManagerInitialized(); // <1>
@@ -290,7 +334,7 @@ public async completeSignOut(url: string): Promise<IAuthenticationResult> {
 
 This is a private method called by the above public methods. This method makes sure that the `userManager` object is intialized with some basic settings.
 
-[source, ts]
+[source, typescript]
 ----
 private async ensureUserManagerInitialized(): Promise<void> {
   if (this.userManager !== undefined) {
@@ -319,7 +363,7 @@ private async ensureUserManagerInitialized(): Promise<void> {
 
 This method returns an `IObservable<IUser>`. Use this method to get the latest user and subscribe to any changes to the `IUser` object.
 
-[source,ts]
+[source,typescript]
 ----
 public getUser(): Observable<IUser | null> {
    return concat( // <1>
@@ -348,7 +392,7 @@ public getUser(): Observable<IUser | null> {
 
 This method returns a user stored by the `this.userManager` class.
 
-[source,ts]
+[source,typescript]
 ----
   private getUserFromStorage(): Observable<IUser> {
     return from(this.ensureUserManagerInitialized()).pipe(
@@ -362,7 +406,7 @@ This method returns a user stored by the `this.userManager` class.
 
 In case you need to view the access token, this is the method to use.
 
-[source,ts]
+[source,typescript]
 ----
 public getAccessToken(): Observable<string> {
   return from(this.ensureUserManagerInitialized()).pipe(
