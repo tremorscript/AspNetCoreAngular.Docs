@@ -144,13 +144,13 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>The angular application (the client)</p>
+<p>The ClientApp (the client angular app)</p>
 </li>
 <li>
-<p>The webapi (the resource)</p>
+<p>The Web Project (the resource api)</p>
 </li>
 <li>
-<p>IdentityServer4 (the Identity Provider also the Secure Token Service)</p>
+<p>The STS Project (the Identity Provider)</p>
 </li>
 </ol>
 </div>
@@ -167,7 +167,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-cs hljs" data-lang="cs">public void ConfigureServices(IServiceCollection services)
+<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">public void ConfigureServices(IServiceCollection services)
 {
     services.AddTransient&lt;IProfileService, CustomProfileService&gt;();
     services.AddTransient&lt;IIdentitySeedData, IdentitySeedData&gt;();
@@ -193,7 +193,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-cs hljs" data-lang="cs">var clientId = client.clientId;
+<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">var clientId = client.clientId;
 var host = client.corsOrigin;
 var spaClient = options.Clients.AddSPA(
     clientId,
@@ -280,7 +280,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">export class AuthInterceptor implements HttpInterceptor {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}
 
   intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
@@ -314,17 +314,64 @@ options.ApiResources.AddApiResource(
 <div class="paragraph">
 <p>The <code>ngInit</code> method of the <code>LoginComponent</code> checks to see which url was called and calls the appropriate method in <code>AuthorizeService.ts</code>.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">ngOnInit() {
+  const action = this.activatedRoute.snapshot.url[1];
+  switch (action.path) {
+    case LoginActions.Login:
+      this.login(this.getReturnUrl());
+      break;
+    case LoginActions.LoginCallback:
+      this.processLoginCallback();
+      break;
+    case LoginActions.LoginFailed:
+      const message = this.activatedRoute.snapshot.queryParamMap.get(QueryParameterNames.Message);
+      this.message.next(message);
+      break;
+    case LoginActions.Profile:
+      this.redirectToProfile();
+      break;
+    case LoginActions.Register:
+      this.redirectToRegister();
+      break;
+    default:
+      throw new Error(`Invalid action '${action}'`);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>shared.module.ts</code> file are where the routes for the login actions are defined.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">RouterModule.forChild([
+  { path: ApplicationPaths.Register, component: LoginComponent },
+  { path: ApplicationPaths.Profile, component: LoginComponent },
+  { path: ApplicationPaths.Login, component: LoginComponent },
+  { path: ApplicationPaths.LoginFailed, component: LoginComponent },
+  { path: ApplicationPaths.LoginCallback, component: LoginComponent },
+  { path: ApplicationPaths.LogOut, component: LogoutComponent },
+  { path: ApplicationPaths.LoggedOut, component: LogoutComponent },
+  { path: ApplicationPaths.LogOutCallback, component: LogoutComponent },
+]),</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_authorizeservice"><a class="anchor" href="#_authorizeservice"></a>AuthorizeService</h3>
 <div class="paragraph">
 <p>The <code>AuthorizeService</code> is the service class that handles the <code>IUser</code> object and general authorization tasks like sign-in and sign-out.</p>
 </div>
+<div class="paragraph">
+<p><code>AuthorizeService</code> uses the functions provided by the <a href="https://www.npmjs.com/package/oidc-client-ts" target="_blank" rel="noopener">oidc-client-ts</a> library to work with the authorization code flows.</p>
+</div>
 <div class="sect3">
 <h4 id="_private_variables"><a class="anchor" href="#_private_variables"></a>private variables</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  private _user: IUser; <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">  private _user: IUser; <i class="conum" data-value="1"></i><b>(1)</b>
   private popUpDisabled = true; <i class="conum" data-value="2"></i><b>(2)</b>
   private userManager: UserManager; <i class="conum" data-value="3"></i><b>(3)</b>
   private userSubject: BehaviorSubject&lt;IUser | null&gt; = new BehaviorSubject(null); <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
@@ -358,7 +405,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">public async signIn(state: any): Promise&lt;IAuthenticationResult&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">public async signIn(state: any): Promise&lt;IAuthenticationResult&gt; {
     await this.ensureUserManagerInitialized(); <i class="conum" data-value="1"></i><b>(1)</b>
     let user: User = null;
     try {
@@ -441,7 +488,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">public async completeSignIn(url: string): Promise&lt;IAuthenticationResult&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">public async completeSignIn(url: string): Promise&lt;IAuthenticationResult&gt; {
   try {
     await this.ensureUserManagerInitialized(); <i class="conum" data-value="1"></i><b>(1)</b>
     const user = await this.userManager.signinCallback(url); <i class="conum" data-value="2"></i><b>(2)</b>
@@ -482,7 +529,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">public async signOut(state: any): Promise&lt;IAuthenticationResult&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">public async signOut(state: any): Promise&lt;IAuthenticationResult&gt; {
   try {
     if (this.popUpDisabled) {
       throw new Error("Popup disabled. Change 'authorize.service.ts:AuthorizeService.popupDisabled' to false to enable it.");
@@ -541,7 +588,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">public async completeSignOut(url: string): Promise&lt;IAuthenticationResult&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">public async completeSignOut(url: string): Promise&lt;IAuthenticationResult&gt; {
   await this.ensureUserManagerInitialized(); <i class="conum" data-value="1"></i><b>(1)</b>
   try {
     await this.userManager.signoutCallback(url); <i class="conum" data-value="2"></i><b>(2)</b>
@@ -582,7 +629,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">private async ensureUserManagerInitialized(): Promise&lt;void&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">private async ensureUserManagerInitialized(): Promise&lt;void&gt; {
   if (this.userManager !== undefined) {
     return;
   }
@@ -623,7 +670,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">public getUser(): Observable&lt;IUser | null&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">public getUser(): Observable&lt;IUser | null&gt; {
    return concat( <i class="conum" data-value="1"></i><b>(1)</b>
      this.userSubject.pipe( <i class="conum" data-value="2"></i><b>(2)</b>
        take(1),
@@ -669,7 +716,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  private getUserFromStorage(): Observable&lt;IUser&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">  private getUserFromStorage(): Observable&lt;IUser&gt; {
     return from(this.ensureUserManagerInitialized()).pipe(
       mergeMap(() =&gt; this.userManager.getUser()),
       map(u =&gt; u &amp;&amp; (u.profile as any)),
@@ -685,7 +732,7 @@ options.ApiResources.AddApiResource(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">public getAccessToken(): Observable&lt;string&gt; {
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">public getAccessToken(): Observable&lt;string&gt; {
   return from(this.ensureUserManagerInitialized()).pipe(
     mergeMap(() =&gt; from(this.userManager.getUser())),
     map(user =&gt; user &amp;&amp; user.access_token),
