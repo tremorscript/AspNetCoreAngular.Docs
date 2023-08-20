@@ -1,6 +1,208 @@
 = Configuration Management 
 :navtitle: Configuration Management 
 :title: Configuration Management
-:toclevels: 4
+:page-toclevels: 4
+:source-language: json, typescript, ts
 
-TBD
+== The Web Project
+
+* All configurations are stored in the `appsettings.json` file and the `appsettings.Development.json` file.
+* All future configurations need to be added to this file.
++
+[source,json]
+----
+{
+  "Data": {
+    "useInMemory": "false",
+    "useSqLite": "true",
+    "Web": "Data Source=Web.db"
+  },
+  "Auth": {
+    "Authority": "https://localhost:50007/",
+    "Audiences": ["aspnetcoreangular"]
+  },
+  "CorsOrigins": []
+}
+----
+
+== The STS Project
+
+* All configurations are stored in the `appsettings.json` file and the `appsettings.Development.json` file.
+* All future configurations need to be added to this file.
++
+[source,json]
+----
+{
+  "ConnectionStrings": {
+    "Identity": "Data Source=STS.db"
+  },
+  "CorsOrigins": ["https://localhost:5005"],
+  "IdentityServer": {
+    "Key": {
+      "Type": "Development"
+    },
+    "ExternalAuth": {
+      "Google": {
+        "ClientId": "",
+        "ClientSecret": ""
+      },
+      "Facebook": {
+        "AppId": "",
+        "AppSecret": ""
+      },
+      "Twitter": {
+        "ConsumerKey": "",
+        "ConsumerSecret": ""
+      },
+      "AzureAd": {
+        "Instance": "https://login.microsoftonline.com/",
+        "Domain": "",
+        "TenantId": "",
+        "ClientId": "",
+        "CallbackPath": "/signin-oidc"
+      }
+    }
+  },
+  "AdminSafeList": "127.0.0.1;192.168.1.5;::1",
+  "UseDevCertificate": true,
+  "UseLocalCertStore": true,
+  "CertificateThumbprint": "__CertificateThumbprint__",
+  "Clients": [
+    {
+      "ClientId": "aspnetcoreangular",
+      "CorsOrigin": "https://localhost:5005"
+    }
+  ]
+}
+----
+
+== The ClientApp
+
+* The ClientApp does not have any configuration but it does download some configuration data before the application initializes.
++
+[source,json]
+----
+{
+  "content": {
+    "app_title": "AspNetCoreAngular",
+    "app_description": "Single page application using ASP.NET Core and Angular",
+    "app_repo_url": "https://github.com/asadsahi/AspNetCoreAngular",
+    "app_nav_home": "Home",
+    "app_nav_examples": "Examples",
+    "app_nav_register": "Register",
+    "app_nav_login": "Login",
+    "app_nav_logout": "Logout",
+    "app_login_btn": "Login",
+    "app_registry_btn": "Register",
+    "app_email": "Email",
+    "app_password": "Password",
+    "app_username": "Username",
+    "app_firstname": "Firstname",
+    "app_lastname": "Lastname",
+    "app_mobile": "Mobile",
+    "app_forget_password": "Forget password? click here"
+  },
+  "cookieConsent": {
+    "showConsent": true,
+    "cookieString": ".AspNet.Consent=yes; expires=Sun, 18 Aug 2024 10:15:05 GMT; path=/; secure"
+  },
+  "cultures": [
+    {
+      "value": "en-GB",
+      "text": "English (United Kingdom)",
+      "current": false
+    },
+    {
+      "value": "en-US",
+      "text": "English (United States)",
+      "current": true
+    },
+    {
+      "value": "fr-FR",
+      "text": "français (France)",
+      "current": false
+    }
+  ]
+}
+----
+
+First, we look at the angular concepts that enable this and then we check the initialization steps.
+
+=== Concepts
+
+==== APP_INITIALIZER
+
+* An `APP_INITIALIZER` is a DI token that you can use to provide one or more initialization functions that return a Promise or an Observable.
+* The provided functions are injected at application startup and executed during app initialization.
+* The app does not initialize unless the Promise is resolved or the Observable is completed.
+* This is useful when you would like to download any configuration data from the server before the app loads and the user can interact with it.
+
+==== TransferState
+
+* A key value store that is transferred from the application on the server side to the application on the client side.
+* The values in the store are serialized/deserialized using JSON.stringify/JSON.parse. 
+* So only boolean, number, string, null and non-class objects will be serialized and deserialized in a non-lossy manner.
+* It is useful to store configuration level data in this key-value store.
+
+==== StateKey
+
+* Create a `StateKey<T>` that can be used to store value of type T with TransferState.
+
+=== Initialization Steps
+
+. The `shared.module.ts` file is where the `APP_INITIALIZER` for the application is defined.
++
+[source,typescript]
+----
+{ provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true },
+{ provide: APP_INITIALIZER, useFactory: appServiceFactory, deps: [AppService], multi: true },
+{ provide: ErrorHandler, useClass: GlobalErrorHandler },
+{ provide: NgbDateParserFormatter, useClass: CustomDateFormatter },
+{ provide: NgbDateAdapter, useClass: CustomNgbDateNativeUTCAdapter },
+----
+
+. The function `appServiceFactory` calls the `AppService.getAppData` method in `AppService.ts` which returns an `Observable`.
++
+[source,typescript]
+----
+export function appServiceFactory(appService: AppService): () => Observable<any> {
+    return () => appService.getAppData();
+}
+----
++
+[source,typescript]
+----
+  getAppData(): Observable<IApplicationConfig> {
+    const transferredAppData = this.transferState.get<IApplicationConfig>(APP_DATA_KEY, null as IApplicationConfig); //<1>
+    if (!transferredAppData) {
+      return this.dataService
+        .get('app/getapplicationdata')
+        .pipe(
+          tap((data: IApplicationConfig) => this.transferState.set<IApplicationConfig>(APP_DATA_KEY, data))
+        )
+    }
+     return of(transferredAppData);
+  }
+----
+<1> The `APP_DATA_KEY` is a constant stored in `AppService.ts` call:
++
+[source,typescript]
+----
+const APP_DATA_KEY = makeStateKey<IApplicationConfig>('appData');
+----
+
+. The `get appData()` property in `AppService.ts` returns the application config data in case you need it.
++
+[source,typescript]
+----
+  public get appData(): IApplicationConfig {
+    return this.transferState.get<IApplicationConfig>(APP_DATA_KEY, null as IApplicationConfig);
+  }
+----
+
+. To use the application config anywhere is your application, import the `AppService` class and call the `appData` property.
+
+== References
+
+* https://angular.io/api/core/APP_INITIALIZER#description[APP_INITIALIZER^]
+* https://angular.io/api/core/TransferState#description[TransferState^]
