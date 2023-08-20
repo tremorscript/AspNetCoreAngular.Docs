@@ -2,23 +2,22 @@
 :navtitle: Authentication and Authorization 
 :title: Authentication and Authorization 
 :page-toclevels: 4
-:source-language: typescript,ts,csharp,cs
+:source-language: typescript,csharp
 
 == Introduction
 
 There are 3 actors involved when it comes to authentication and authorization.
 
-. The ClientApp (the client angular app)
-. The Web Project (the resource api)
-. The STS Project (the Identity Provider)
+. https://github.com/tremorscript/AspNetCoreAngular/tree/main/src/Presentation/Web/ClientApp[The ClientApp^] (the client angular app)
+. https://github.com/tremorscript/AspNetCoreAngular/tree/main/src/Presentation/Web[The Web Project^] (the resource api)
+. https://github.com/tremorscript/AspNetCoreAngular/tree/main/src/Presentation/STS[The STS Project^] (the Identity Provider)
 
 == STS Project
 
-First, we see how the client is configured in the STS project.
-
-In the `ConfigureServices` method of `Startup.cs`, the `AddStsServer` extension method of `IServiceCollection` is called.
-
-[source, csharp]
+* First, we configure the client in the STS project.
+* In the `ConfigureServices` method of `Startup.cs`, the `AddStsServer` extension method of `IServiceCollection` is called.
++
+[source,csharp]
 ----
 public void ConfigureServices(IServiceCollection services)
 {
@@ -34,18 +33,15 @@ public void ConfigureServices(IServiceCollection services)
     services.AddStsServer(Configuration, this.HostingEnvironment);
 }
 ----
-
-The `AddStsServer` method is defined in the `ServicesExtensions.cs` class in the project.
-
-Here, the angular client is configured as a valid client with access to the WebApi resource.
-
-For now, the clientid and the resource name are the same. Need to change that.
-
+* The `AddStsServer` method is defined in the `ServicesExtensions.cs` class in the project.
+* In the method, the angular client is configured as a valid client with access to the WebApi resource.
+* For now, the clientid and the resource name are the same. Need to change that.
++
 [source,csharp]
 ----
 var clientId = client.clientId;
 var host = client.corsOrigin;
-var spaClient = options.Clients.AddSPA(
+var spaClient = options.Clients.AddSPA( // <1>
     clientId,
     spa =>
         spa.WithRedirectUri($"{host}/authentication/login-callback")
@@ -54,7 +50,7 @@ var spaClient = options.Clients.AddSPA(
 
 spaClient.AlwaysIncludeUserClaimsInIdToken = true;
 
-options.ApiResources.AddApiResource(
+options.ApiResources.AddApiResource( // <2>
     clientId,
     resource =>
     {
@@ -63,12 +59,14 @@ options.ApiResources.AddApiResource(
             IdentityServerConstants.StandardScopes.Email);
     });
 ----
+<1> Configure the client by adding the clientId and the callback urls for login and logout.
+<2> Add the resource to which the client can request access, in this case the Web Api project.
 
 == Web Project
 
-In the `Startup.cs` class of the web api services, we configure the authentication to use JWT tokens.
-
-[source,cs]
+* In the https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/Startup.cs[Startup.cs^] class of the web api services, we configure the authentication to use JWT tokens.
++
+[source,csharp]
 ----
 services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -91,23 +89,21 @@ services
         options.RequireHttpsMetadata = false;
     });
 ----
-
-All the `ApiControllers` in the application inherit from the `BaseController` which has the `[Authorize]` attribute.
-
-If you need an `ApiController` that does not need authorization, then add `[AllowAnonymous]` attrbute to the controller class. See `AppController.cs` as an example.
+* All the `ApiControllers` in the application inherit from the https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/Controllers/BaseController.cs[BaseController^] which has the `[Authorize]` attribute.
+* If you need an `ApiController` that does not need authorization, then add `[AllowAnonymous]` attrbute to the controller class. See https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/Controllers/AppController.cs[AppController.cs] as an example.
 
 == The ClientApp(Angular) application
 
 There are two main actors involved:
 
-. AuthInterceptor.ts
-. login.component.ts
-. AuthorizeService.ts
+. https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/interceptors/auth.interceptor.ts[AuthInterceptor.ts^]
+. https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/components/login/login.component.ts[login.component.ts]
+. https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts[AuthorizeService.ts^]
 
 === AuthInterceptor
 
-The `AuthInterceptor` looks for  is quite simple. If it receives a response with status code '401 - Unauthorized', it navigates to the `LoginComponent`.
-
+* The `AuthInterceptor` checks for a response with status code '401 - Unauthorized' and navigates to the `LoginComponent`.
++
 [source,typescript]
 ----
 export class AuthInterceptor implements HttpInterceptor {
@@ -130,8 +126,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
 === LoginComponent
 
-The `ngInit` method of the `LoginComponent` checks to see which url was called and calls the appropriate method in `AuthorizeService.ts`.
-
+* The `ngInit` method of the `LoginComponent` checks to see which url was called and calls the appropriate method in https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts[AuthorizeService.ts^].
++
 [source,typescript]
 ----
 ngOnInit() {
@@ -159,8 +155,8 @@ ngOnInit() {
 }
 ----
 
-The `shared.module.ts` file are where the routes for the login actions are defined.
-
+* The https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/shared.module.ts[shared.module.ts^] file are where the routes for the login actions are defined.
++
 [source, typescript]
 ----
 RouterModule.forChild([
@@ -175,12 +171,11 @@ RouterModule.forChild([
 ]),
 ----
 
-
 === AuthorizeService
 
-The `AuthorizeService` is the service class that handles the `IUser` object and general authorization tasks like sign-in and sign-out.
+* https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts[AuthorizeService^] is the service class that handles the `IUser` object and general authorization tasks like sign-in and sign-out.
 
-`AuthorizeService` uses the functions provided by the https://www.npmjs.com/package/oidc-client-ts[oidc-client-ts^] library to work with the authorization code flows.
+* https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts[AuthorizeService^] uses the functions provided by the https://www.npmjs.com/package/oidc-client-ts[oidc-client-ts^] library to work with the authorization code flows.
 
 ==== private variables
 
@@ -191,7 +186,7 @@ The `AuthorizeService` is the service class that handles the `IUser` object and 
   private userManager: UserManager; // <3>
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null); // <4>
 ----
-<1> `IUser` is an interface that extends from the `User` class of the `oidc-client-ts` library. It has 2 properties - the name of the user and a list of roles attached to the user.
+<1> `IUser` is an interface that extends from the `User` class of the https://www.npmjs.com/package/oidc-client-ts[oidc-client-ts^] library. It has 2 properties - the name of the user and a list of roles attached to the user.
 <2> If you would like to enable authentication using a popup then enable this flag. It is disabled by default because users generally do not have popups enabled.
 <3> `UserManager` is the class provided by the `oidc-client-ts` library that manages the `User` object. It provides the methods that help add a user, remove a user, sign-in a user etc.. https://authts.github.io/oidc-client-ts/classes/UserManager.html[A complete list of all the methods provided by UserManager.^]
 <4> A `BehaviourSubject` that publishes an `IUser` when signed in and publishes a `null` when the user signs-out or if the user has not signed-in yet. If subscribers would like to listen for changes to the logged-in state of a user, they can call the `getUser` method (discussed later) which returns an `Observable` of this `BehaviourSubject`.
