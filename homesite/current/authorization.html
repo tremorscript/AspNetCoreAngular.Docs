@@ -7,7 +7,6 @@
     <link rel="canonical" href="https://tremorscript.com/homesite/current/authorization.html">
     <meta name="generator" content="Antora 3.1.4">
     <link rel="stylesheet" href="../../_/css/site.css">
-    <script>var uiRootPath = '../../_'</script>
   </head>
   <body class="article">
 <header class="header">
@@ -28,6 +27,27 @@
     <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
         <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
       </div>
     </div>
   </nav>
@@ -127,8 +147,8 @@
     <li><a href="authorization.html">Authentication and Authorization</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/tremorscript/AspNetCoreAngular.Docs/edit/main/modules/ROOT/pages/authorization.adoc">Edit this Page</a></div>
-  </div>
+<div class="edit-this-page"><a href="https://github.com/tremorscript/AspNetCoreAngular.Docs/edit/main/modules/ROOT/pages/authorization.adoc">Edit this Page</a></div>
+</div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="4">
   <div class="toc-menu"></div>
@@ -144,13 +164,13 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>The ClientApp (the client angular app)</p>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/tree/main/src/Presentation/Web/ClientApp" target="_blank" rel="noopener">The ClientApp</a> (the client angular app)</p>
 </li>
 <li>
-<p>The Web Project (the resource api)</p>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/tree/main/src/Presentation/Web" target="_blank" rel="noopener">The Web Project</a> (the resource api)</p>
 </li>
 <li>
-<p>The STS Project (the Identity Provider)</p>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/tree/main/src/Presentation/STS" target="_blank" rel="noopener">The STS Project</a> (the Identity Provider)</p>
 </li>
 </ol>
 </div>
@@ -159,12 +179,13 @@
 <div class="sect1">
 <h2 id="_sts_project"><a class="anchor" href="#_sts_project"></a>STS Project</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>First, we see how the client is configured in the STS project.</p>
-</div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
+<p>First, we configure the client in the STS project.</p>
+</li>
+<li>
 <p>In the <code>ConfigureServices</code> method of <code>Startup.cs</code>, the <code>AddStsServer</code> extension method of <code>IServiceCollection</code> is called.</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">public void ConfigureServices(IServiceCollection services)
@@ -182,20 +203,20 @@
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+</li>
+<li>
 <p>The <code>AddStsServer</code> method is defined in the <code>ServicesExtensions.cs</code> class in the project.</p>
-</div>
-<div class="paragraph">
-<p>Here, the angular client is configured as a valid client with access to the WebApi resource.</p>
-</div>
-<div class="paragraph">
+</li>
+<li>
+<p>In the method, the angular client is configured as a valid client with access to the WebApi resource.</p>
+</li>
+<li>
 <p>For now, the clientid and the resource name are the same. Need to change that.</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">var clientId = client.clientId;
 var host = client.corsOrigin;
-var spaClient = options.Clients.AddSPA(
+var spaClient = options.Clients.AddSPA( <i class="conum" data-value="1"></i><b>(1)</b>
     clientId,
     spa =&gt;
         spa.WithRedirectUri($"{host}/authentication/login-callback")
@@ -204,7 +225,7 @@ var spaClient = options.Clients.AddSPA(
 
 spaClient.AlwaysIncludeUserClaimsInIdToken = true;
 
-options.ApiResources.AddApiResource(
+options.ApiResources.AddApiResource( <i class="conum" data-value="2"></i><b>(2)</b>
     clientId,
     resource =&gt;
     {
@@ -214,17 +235,33 @@ options.ApiResources.AddApiResource(
     });</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Configure the client by adding the clientId and the callback urls for login and logout.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Add the resource to which the client can request access, in this case the Web Api project.</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_web_project"><a class="anchor" href="#_web_project"></a>Web Project</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>In the <code>Startup.cs</code> class of the web api services, we configure the authentication to use JWT tokens.</p>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In the <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/Startup.cs" target="_blank" rel="noopener">Startup.cs</a> class of the web api services, we configure the authentication to use JWT tokens.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-cs hljs" data-lang="cs">services
+<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =&gt;
     {
@@ -246,11 +283,14 @@ options.ApiResources.AddApiResource(
     });</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>All the <code>ApiControllers</code> in the application inherit from the <code>BaseController</code> which has the <code>[Authorize]</code> attribute.</p>
-</div>
-<div class="paragraph">
-<p>If you need an <code>ApiController</code> that does not need authorization, then add <code>[AllowAnonymous]</code> attrbute to the controller class. See <code>AppController.cs</code> as an example.</p>
+</li>
+<li>
+<p>All the <code>ApiControllers</code> in the application inherit from the <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/Controllers/BaseController.cs" target="_blank" rel="noopener">BaseController</a> which has the <code>[Authorize]</code> attribute.</p>
+</li>
+<li>
+<p>If you need an <code>ApiController</code> that does not need authorization, then add <code>[AllowAnonymous]</code> attrbute to the controller class. See <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/Controllers/AppController.cs">AppController.cs</a> as an example.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -263,21 +303,22 @@ options.ApiResources.AddApiResource(
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>AuthInterceptor.ts</p>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/interceptors/auth.interceptor.ts" target="_blank" rel="noopener">AuthInterceptor.ts</a></p>
 </li>
 <li>
-<p>login.component.ts</p>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/components/login/login.component.ts">login.component.ts</a></p>
 </li>
 <li>
-<p>AuthorizeService.ts</p>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts" target="_blank" rel="noopener">AuthorizeService.ts</a></p>
 </li>
 </ol>
 </div>
 <div class="sect2">
 <h3 id="_authinterceptor"><a class="anchor" href="#_authinterceptor"></a>AuthInterceptor</h3>
-<div class="paragraph">
-<p>The <code>AuthInterceptor</code> looks for  is quite simple. If it receives a response with status code '401 - Unauthorized', it navigates to the <code>LoginComponent</code>.</p>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>AuthInterceptor</code> checks for a response with status code '401 - Unauthorized' and navigates to the <code>LoginComponent</code>.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">export class AuthInterceptor implements HttpInterceptor {
@@ -308,12 +349,16 @@ options.ApiResources.AddApiResource(
 </tr>
 </table>
 </div>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_logincomponent"><a class="anchor" href="#_logincomponent"></a>LoginComponent</h3>
-<div class="paragraph">
-<p>The <code>ngInit</code> method of the <code>LoginComponent</code> checks to see which url was called and calls the appropriate method in <code>AuthorizeService.ts</code>.</p>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>ngInit</code> method of the <code>LoginComponent</code> checks to see which url was called and calls the appropriate method in <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts" target="_blank" rel="noopener">AuthorizeService.ts</a>.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">ngOnInit() {
@@ -341,9 +386,9 @@ options.ApiResources.AddApiResource(
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>The <code>shared.module.ts</code> file are where the routes for the login actions are defined.</p>
-</div>
+</li>
+<li>
+<p>The <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/shared.module.ts" target="_blank" rel="noopener">shared.module.ts</a> file are where the routes for the login actions are defined.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">RouterModule.forChild([
@@ -358,14 +403,21 @@ options.ApiResources.AddApiResource(
 ]),</code></pre>
 </div>
 </div>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_authorizeservice"><a class="anchor" href="#_authorizeservice"></a>AuthorizeService</h3>
-<div class="paragraph">
-<p>The <code>AuthorizeService</code> is the service class that handles the <code>IUser</code> object and general authorization tasks like sign-in and sign-out.</p>
-</div>
-<div class="paragraph">
-<p><code>AuthorizeService</code> uses the functions provided by the <a href="https://www.npmjs.com/package/oidc-client-ts" target="_blank" rel="noopener">oidc-client-ts</a> library to work with the authorization code flows.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts" target="_blank" rel="noopener">AuthorizeService</a> is the service class that handles the <code>IUser</code> object and general authorization tasks like sign-in and sign-out.</p>
+</li>
+<li>
+<p><a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/authorize.service.ts" target="_blank" rel="noopener">AuthorizeService</a> uses the functions provided by the <a href="https://www.npmjs.com/package/oidc-client-ts" target="_blank" rel="noopener">oidc-client-ts</a> library to work with the authorization code flows.</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="_private_variables"><a class="anchor" href="#_private_variables"></a>private variables</h4>
@@ -381,7 +433,7 @@ options.ApiResources.AddApiResource(
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>IUser</code> is an interface that extends from the <code>User</code> class of the <code>oidc-client-ts</code> library. It has 2 properties - the name of the user and a list of roles attached to the user.</td>
+<td><code>IUser</code> is an interface that extends from the <code>User</code> class of the <a href="https://www.npmjs.com/package/oidc-client-ts" target="_blank" rel="noopener">oidc-client-ts</a> library. It has 2 properties - the name of the user and a list of roles attached to the user.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>

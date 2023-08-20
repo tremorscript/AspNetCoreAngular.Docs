@@ -7,7 +7,6 @@
     <link rel="canonical" href="https://tremorscript.com/homesite/current/configuration-management.html">
     <meta name="generator" content="Antora 3.1.4">
     <link rel="stylesheet" href="../../_/css/site.css">
-    <script>var uiRootPath = '../../_'</script>
   </head>
   <body class="article">
 <header class="header">
@@ -28,6 +27,27 @@
     <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
         <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
       </div>
     </div>
   </nav>
@@ -127,16 +147,302 @@
     <li><a href="configuration-management.html">Configuration Management</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/tremorscript/AspNetCoreAngular.Docs/edit/main/modules/ROOT/pages/configuration-management.adoc">Edit this Page</a></div>
-  </div>
+<div class="edit-this-page"><a href="https://github.com/tremorscript/AspNetCoreAngular.Docs/edit/main/modules/ROOT/pages/configuration-management.adoc">Edit this Page</a></div>
+</div>
   <div class="content">
-<aside class="toc sidebar" data-title="Contents" data-levels="2">
+<aside class="toc sidebar" data-title="Contents" data-levels="4">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
 <h1 class="page">Configuration Management</h1>
+<div class="sect1">
+<h2 id="_the_web_project"><a class="anchor" href="#_the_web_project"></a>The Web Project</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>All configurations are stored in the <code>appsettings.json</code> file and the <code>appsettings.Development.json</code> file.</p>
+</li>
+<li>
+<p>All future configurations need to be added to this file.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "Data": {
+    "useInMemory": "false",
+    "useSqLite": "true",
+    "Web": "Data Source=Web.db"
+  },
+  "Auth": {
+    "Authority": "https://localhost:50007/",
+    "Audiences": ["aspnetcoreangular"]
+  },
+  "CorsOrigins": []
+}</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_sts_project"><a class="anchor" href="#_the_sts_project"></a>The STS Project</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>All configurations are stored in the <code>appsettings.json</code> file and the <code>appsettings.Development.json</code> file.</p>
+</li>
+<li>
+<p>All future configurations need to be added to this file.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "ConnectionStrings": {
+    "Identity": "Data Source=STS.db"
+  },
+  "CorsOrigins": ["https://localhost:5005"],
+  "IdentityServer": {
+    "Key": {
+      "Type": "Development"
+    },
+    "ExternalAuth": {
+      "Google": {
+        "ClientId": "",
+        "ClientSecret": ""
+      },
+      "Facebook": {
+        "AppId": "",
+        "AppSecret": ""
+      },
+      "Twitter": {
+        "ConsumerKey": "",
+        "ConsumerSecret": ""
+      },
+      "AzureAd": {
+        "Instance": "https://login.microsoftonline.com/",
+        "Domain": "",
+        "TenantId": "",
+        "ClientId": "",
+        "CallbackPath": "/signin-oidc"
+      }
+    }
+  },
+  "AdminSafeList": "127.0.0.1;192.168.1.5;::1",
+  "UseDevCertificate": true,
+  "UseLocalCertStore": true,
+  "CertificateThumbprint": "__CertificateThumbprint__",
+  "Clients": [
+    {
+      "ClientId": "aspnetcoreangular",
+      "CorsOrigin": "https://localhost:5005"
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_clientapp"><a class="anchor" href="#_the_clientapp"></a>The ClientApp</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>The ClientApp does not have any configuration but it does download some configuration data before the application initializes.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "content": {
+    "app_title": "AspNetCoreAngular",
+    "app_description": "Single page application using ASP.NET Core and Angular",
+    "app_repo_url": "https://github.com/asadsahi/AspNetCoreAngular",
+    "app_nav_home": "Home",
+    "app_nav_examples": "Examples",
+    "app_nav_register": "Register",
+    "app_nav_login": "Login",
+    "app_nav_logout": "Logout",
+    "app_login_btn": "Login",
+    "app_registry_btn": "Register",
+    "app_email": "Email",
+    "app_password": "Password",
+    "app_username": "Username",
+    "app_firstname": "Firstname",
+    "app_lastname": "Lastname",
+    "app_mobile": "Mobile",
+    "app_forget_password": "Forget password? click here"
+  },
+  "cookieConsent": {
+    "showConsent": true,
+    "cookieString": ".AspNet.Consent=yes; expires=Sun, 18 Aug 2024 10:15:05 GMT; path=/; secure"
+  },
+  "cultures": [
+    {
+      "value": "en-GB",
+      "text": "English (United Kingdom)",
+      "current": false
+    },
+    {
+      "value": "en-US",
+      "text": "English (United States)",
+      "current": true
+    },
+    {
+      "value": "fr-FR",
+      "text": "français (France)",
+      "current": false
+    }
+  ]
+}</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
 <div class="paragraph">
-<p>TBD</p>
+<p>First, we look at the angular concepts that enable this and then we check the initialization steps.</p>
+</div>
+<div class="sect2">
+<h3 id="_concepts"><a class="anchor" href="#_concepts"></a>Concepts</h3>
+<div class="sect3">
+<h4 id="_app_initializer"><a class="anchor" href="#_app_initializer"></a>APP_INITIALIZER</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>An <code>APP_INITIALIZER</code> is a DI token that you can use to provide one or more initialization functions that return a Promise or an Observable.</p>
+</li>
+<li>
+<p>The provided functions are injected at application startup and executed during app initialization.</p>
+</li>
+<li>
+<p>The app does not initialize unless the Promise is resolved or the Observable is completed.</p>
+</li>
+<li>
+<p>This is useful when you would like to download any configuration data from the server before the app loads and the user can interact with it.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_transferstate"><a class="anchor" href="#_transferstate"></a>TransferState</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>A key value store that is transferred from the application on the server side to the application on the client side.</p>
+</li>
+<li>
+<p>The values in the store are serialized/deserialized using JSON.stringify/JSON.parse.</p>
+</li>
+<li>
+<p>So only boolean, number, string, null and non-class objects will be serialized and deserialized in a non-lossy manner.</p>
+</li>
+<li>
+<p>It is useful to store configuration level data in this key-value store.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_statekey"><a class="anchor" href="#_statekey"></a>StateKey</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Create a <code>StateKey&lt;T&gt;</code> that can be used to store value of type T with TransferState.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_initialization_steps"><a class="anchor" href="#_initialization_steps"></a>Initialization Steps</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The <code>shared.module.ts</code> file is where the <code>APP_INITIALIZER</code> for the application is defined.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">{ provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true },
+{ provide: APP_INITIALIZER, useFactory: appServiceFactory, deps: [AppService], multi: true },
+{ provide: ErrorHandler, useClass: GlobalErrorHandler },
+{ provide: NgbDateParserFormatter, useClass: CustomDateFormatter },
+{ provide: NgbDateAdapter, useClass: CustomNgbDateNativeUTCAdapter },</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The function <code>appServiceFactory</code> calls the <code>AppService.getAppData</code> method in <code>AppService.ts</code> which returns an <code>Observable</code>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">export function appServiceFactory(appService: AppService): () =&gt; Observable&lt;any&gt; {
+    return () =&gt; appService.getAppData();
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">  getAppData(): Observable&lt;IApplicationConfig&gt; {
+    const transferredAppData = this.transferState.get&lt;IApplicationConfig&gt;(APP_DATA_KEY, null as IApplicationConfig); <i class="conum" data-value="1"></i><b>(1)</b>
+    if (!transferredAppData) {
+      return this.dataService
+        .get('app/getapplicationdata')
+        .pipe(
+          tap((data: IApplicationConfig) =&gt; this.transferState.set&lt;IApplicationConfig&gt;(APP_DATA_KEY, data))
+        )
+    }
+     return of(transferredAppData);
+  }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>APP_DATA_KEY</code> is a constant stored in <code>AppService.ts</code> call:</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">const APP_DATA_KEY = makeStateKey&lt;IApplicationConfig&gt;('appData');</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The <code>get appData()</code> property in <code>AppService.ts</code> returns the application config data in case you need it.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">  public get appData(): IApplicationConfig {
+    return this.transferState.get&lt;IApplicationConfig&gt;(APP_DATA_KEY, null as IApplicationConfig);
+  }</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To use the application config anywhere is your application, import the <code>AppService</code> class and call the <code>appData</code> property.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references"><a class="anchor" href="#_references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://angular.io/api/core/APP_INITIALIZER#description" target="_blank" rel="noopener">APP_INITIALIZER</a></p>
+</li>
+<li>
+<p><a href="https://angular.io/api/core/TransferState#description" target="_blank" rel="noopener">TransferState</a></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </article>
   </div>
