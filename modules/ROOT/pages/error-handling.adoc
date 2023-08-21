@@ -1,5 +1,194 @@
-= Error Handling 
-:navtitle: Error Handling
-:title: Error Handling 
+= Error Handling And Logging 
+:navtitle: Error Handling and Logging
+:title: Error Handling and Logging
+:page-toclevels: 4
+:source-language: typescript,csharp
 
-TBD
+== Server-Side Error Handling
+
+* A `CustomExceptionHandler` middleware handles the exceptions thrown by the middleware request pipeline of the webapi.
++
+[source,csharp]
+----
+public class CustomExceptionHandler
+{
+    private readonly RequestDelegate next;
+
+    public CustomExceptionHandler(RequestDelegate next)
+    {
+        this.next = next;
+    }
+
+    public async Task Invoke(HttpContext context)
+    {
+        try
+        {
+            await this.next(context);
+        }
+        catch (Exception ex)
+        {
+            await HandleExceptionAsync(context, ex);
+        }
+    }
+
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        var code = HttpStatusCode.InternalServerError;
+
+        var result = string.Empty;
+
+        switch (exception)
+        {
+            case ValidationException validationException:
+                code = HttpStatusCode.BadRequest;
+                result = JsonConvert.SerializeObject(validationException.Failures);
+                break;
+            case NotFoundException _:
+                code = HttpStatusCode.NotFound;
+                break;
+        }
+
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)code;
+
+        if (string.IsNullOrEmpty(result))
+        {
+            result = JsonConvert.SerializeObject(new { error = exception.Message });
+        }
+
+        return context.Response.WriteAsync(result);
+    }
+}
+----
+* The `UseInfrastructure` method of the `MiddlewareExtensions.cs` class is where the exception handlers are configured.
++
+[source, csharp]
+----
+if (env.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage(); // <1>
+}
+else
+{
+    app.UseExceptionHandler("/Error"); // <2>
+
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+    app.UseResponseCompression();
+}
+app.UseMiddleware<CustomExceptionHandler>(); // <3>
+----
+<1> Detailed exception that should not be displayed in the production environment.
+<2> Catches and logs unhandled exceptions and re-executes the request using the path indicated. It is not re-executed if the response has started. `/Error` points to the `Error.cshtml` page in the `Pages` folder. Useful if your application is an mvc or razor page application
+<3> This is where the `CustomExceptionHandler` is added to the middleware pipeline. This is useful if your application is a web api and your responses are mostly json.
+* In general, exception handler middlewares must be added before adding any other middleware, so that they can catch unhandled exceptions thrown in middlewares.
+
+== Client-Side Error Handling
+
+* The angular application uses the `ErrorHandler` class which provides a hook for centralized exception handling.
+* The `global-error.service.ts` class is where the global error handler is defined.
++
+[source, typescript]
+----
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { ToastService } from './toast.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GlobalErrorHandler implements ErrorHandler {
+  constructor(private injector: Injector) {}
+
+  handleError(errorResponse: any): void {
+    if (errorResponse.status === 401) {
+      this.injector.get(ToastService).danger('Unauthorised: Please login again.');
+    } else if (errorResponse.status === 400) {
+      this.injector.get(ToastService).danger(this.formatErrors(errorResponse.error.errors));
+    } else {
+      // All other errors including 500
+      const error = errorResponse && errorResponse.rejection ? errorResponse.rejection.error : errorResponse;
+      this.injector.get(ToastService).danger(error);
+      // IMPORTANT: Don't Rethrow the error otherwise it will not emit errors after once
+      // https://stackoverflow.com/questions/44356040/angular-global-error-handler-working-only-once
+      // throw errorResponse;
+    }
+    console.error(errorResponse);
+  }
+
+  private formatErrors(errors: any) {
+    return errors ? errors.map((err: any) => err.message).join('<br>') : '';
+  }
+}
+----
+* This is configured in the `shared.module.ts` file.
++
+[source, typescript]
+----
+        { provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true },
+        { provide: APP_INITIALIZER, useFactory: appServiceFactory, deps: [AppService], multi: true },
+        { provide: ErrorHandler, useClass: GlobalErrorHandler },
+        { provide: NgbDateParserFormatter, useClass: CustomDateFormatter },
+        { provide: NgbDateAdapter, useClass: CustomNgbDateNativeUTCAdapter },
+    ]
+})
+export class SharedModule { }
+----
+
+== Server-Side Logging
+
+* The `Sqlite` database is used to store the errors and `Serilog.Sinks.Sqlite` library is used to log the errors.
+* The initialization is done in the startup method.
++
+[source, csharp]
+----
+var builder = new ConfigurationBuilder()
+                    .SetBasePath(this.HostingEnvironment.ContentRootPath)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{this.HostingEnvironment.EnvironmentName}.json", optional: true)
+                    .AddEnvironmentVariables();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Build())
+    .CreateLogger();
+----
+* The `appsettings.json` file is where the details are configured.
++
+[source, json]
+----
+{
+  "Serilog": {
+    "Using": [
+      "Serilog.Sinks.SQLite"
+    ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "Microsoft.Hosting.Lifetime": "Information",
+        "System": "Error"
+      }
+    },
+    "Enrich": [
+      "FromLogContext",
+      "WithMachineName",
+      "WithThreadId"
+    ],
+    "WriteTo": [
+      {
+        "Name": "SQLite",
+        "Args": {
+          "sqliteDbPath": "./logs/log.db",
+          "tableName": "Logs",
+          "storeTimestampInUtc": "true"
+        }
+      }
+    ]
+  }
+}
+----
+
+== References
+
+* https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-7.0[Error Handling in AspNetCore^]
+* https://damienbod.com/2023/08/21/asp-net-core-logging-using-serilog-and-azure/[AspNetCore logging with Serilog^]
+* https://github.com/saleem-mirza/serilog-sinks-sqlite[Serilog Sinks Sqlite^]

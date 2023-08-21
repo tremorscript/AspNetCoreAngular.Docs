@@ -188,7 +188,7 @@ RouterModule.forChild([
 ----
 <1> `IUser` is an interface that extends from the `User` class of the https://www.npmjs.com/package/oidc-client-ts[oidc-client-ts^] library. It has 2 properties - the name of the user and a list of roles attached to the user.
 <2> If you would like to enable authentication using a popup then enable this flag. It is disabled by default because users generally do not have popups enabled.
-<3> `UserManager` is the class provided by the `oidc-client-ts` library that manages the `User` object. It provides the methods that help add a user, remove a user, sign-in a user etc.. https://authts.github.io/oidc-client-ts/classes/UserManager.html[A complete list of all the methods provided by UserManager.^]
+<3> `UserManager` is the class provided by the https://www.npmjs.com/package/oidc-client-ts[oidc-client-ts^] library that manages the `User` object. It provides the methods that help add a user, remove a user, sign-in a user etc.. https://authts.github.io/oidc-client-ts/classes/UserManager.html[A complete list of all the methods provided by UserManager.^]
 <4> A `BehaviourSubject` that publishes an `IUser` when signed in and publishes a `null` when the user signs-out or if the user has not signed-in yet. If subscribers would like to listen for changes to the logged-in state of a user, they can call the `getUser` method (discussed later) which returns an `Observable` of this `BehaviourSubject`.
 
 ==== signIn method

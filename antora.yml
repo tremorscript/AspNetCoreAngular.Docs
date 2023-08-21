@@ -1,5 +1,5 @@
-name: homesite
-title: Home page
+name: AspNetCoreAngular
+title: AspNetCoreAngular
 version: 1.0.0
 start_page: index.adoc
 asciidoc:

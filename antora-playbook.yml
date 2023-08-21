@@ -1,6 +1,6 @@
 site:
   title: AspNetCoreAngular Developer Documentation
-  start_page: homesite::index.adoc
+  start_page: AspNetCoreAngular::index.adoc
   url: https://tremorscript.com
 content:
   sources:
