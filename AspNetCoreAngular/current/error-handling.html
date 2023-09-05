@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Error Handling and Logging :: AspNetCoreAngular Developer Documentation</title>
+    <link rel="canonical" href="https://tremorscript.com/AspNetCoreAngular/current/error-handling.html">
+    <meta name="generator" content="Antora 3.1.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://tremorscript.com">AspNetCoreAngular Developer Documentation</a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs" >
+        </div>
+      </div>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="AspNetCoreAngular" data-version="1.0.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">AspNetCoreAngular</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="getting-started.html">Getting Started</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="code-quality-guidelines.html">Code Quality Guidelines</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="pull-request-guidelines.html">Pull Request Guidelines</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="content-security-policy.html">Content Security Policy</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="authorization.html">Authentication and Authorization</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="configuration-management.html">Configuration Management</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling and Logging</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="internationalization.html">Internationalization</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="unit-testing.html">Performance Testing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="functional-testing.html">Functional Testing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="e2e-testing.html">End-to-End Testing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="property-based-testing.html">Property Based Testing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="performance-testing.html">Performance Testing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="owasp-top10.html">OWASP Top 10</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="threat-modeling.html">Threat Modeling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="api-versioning.html">Api Versioning Policy</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="release-policy.html">Release Policy</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">AspNetCoreAngular</span>
+    <span class="version">1.0.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="index.html">AspNetCoreAngular</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.0.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">AspNetCoreAngular</a></li>
+    <li><a href="error-handling.html">Error Handling and Logging</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/tremorscript/AspNetCoreAngular.Docs/edit/main/modules/ROOT/pages/error-handling.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="4">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Error Handling and Logging</h1>
+<div class="sect1">
+<h2 id="_server_side_error_handling"><a class="anchor" href="#_server_side_error_handling"></a>Server-Side Error Handling</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>A <code>CustomExceptionHandler</code> middleware handles the exceptions thrown by the middleware request pipeline of the webapi.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">public class CustomExceptionHandler
+{
+    private readonly RequestDelegate next;
+
+    public CustomExceptionHandler(RequestDelegate next)
+    {
+        this.next = next;
+    }
+
+    public async Task Invoke(HttpContext context)
+    {
+        try
+        {
+            await this.next(context);
+        }
+        catch (Exception ex)
+        {
+            await HandleExceptionAsync(context, ex);
+        }
+    }
+
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        var code = HttpStatusCode.InternalServerError;
+
+        var result = string.Empty;
+
+        switch (exception)
+        {
+            case ValidationException validationException:
+                code = HttpStatusCode.BadRequest;
+                result = JsonConvert.SerializeObject(validationException.Failures);
+                break;
+            case NotFoundException _:
+                code = HttpStatusCode.NotFound;
+                break;
+        }
+
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)code;
+
+        if (string.IsNullOrEmpty(result))
+        {
+            result = JsonConvert.SerializeObject(new { error = exception.Message });
+        }
+
+        return context.Response.WriteAsync(result);
+    }
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The <code>UseInfrastructure</code> method of the <code>MiddlewareExtensions.cs</code> class is where the exception handlers are configured.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">if (env.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage(); <i class="conum" data-value="1"></i><b>(1)</b>
+}
+else
+{
+    app.UseExceptionHandler("/Error"); <i class="conum" data-value="2"></i><b>(2)</b>
+
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+    app.UseResponseCompression();
+}
+app.UseMiddleware&lt;CustomExceptionHandler&gt;(); <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Detailed exception that should not be displayed in the production environment.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Catches and logs unhandled exceptions and re-executes the request using the path indicated. It is not re-executed if the response has started. <code>/Error</code> points to the <code>Error.cshtml</code> page in the <code>Pages</code> folder. Useful if your application is an mvc or razor page application</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>This is where the <code>CustomExceptionHandler</code> is added to the middleware pipeline. This is useful if your application is a web api and your responses are mostly json.</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>In general, exception handler middlewares must be added before adding any other middleware, so that they can catch unhandled exceptions thrown in middlewares.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_client_side_error_handling"><a class="anchor" href="#_client_side_error_handling"></a>Client-Side Error Handling</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>The angular application uses the <code>ErrorHandler</code> class which provides a hook for centralized exception handling.</p>
+</li>
+<li>
+<p>The <code>global-error.service.ts</code> class is where the global error handler is defined.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { ToastService } from './toast.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GlobalErrorHandler implements ErrorHandler {
+  constructor(private injector: Injector) {}
+
+  handleError(errorResponse: any): void {
+    if (errorResponse.status === 401) {
+      this.injector.get(ToastService).danger('Unauthorised: Please login again.');
+    } else if (errorResponse.status === 400) {
+      this.injector.get(ToastService).danger(this.formatErrors(errorResponse.error.errors));
+    } else {
+      // All other errors including 500
+      const error = errorResponse &amp;&amp; errorResponse.rejection ? errorResponse.rejection.error : errorResponse;
+      this.injector.get(ToastService).danger(error);
+      // IMPORTANT: Don't Rethrow the error otherwise it will not emit errors after once
+      // https://stackoverflow.com/questions/44356040/angular-global-error-handler-working-only-once
+      // throw errorResponse;
+    }
+    console.error(errorResponse);
+  }
+
+  private formatErrors(errors: any) {
+    return errors ? errors.map((err: any) =&gt; err.message).join('&lt;br&gt;') : '';
+  }
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This is configured in the <code>shared.module.ts</code> file.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-typescript hljs" data-lang="typescript">        { provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true },
+        { provide: APP_INITIALIZER, useFactory: appServiceFactory, deps: [AppService], multi: true },
+        { provide: ErrorHandler, useClass: GlobalErrorHandler },
+        { provide: NgbDateParserFormatter, useClass: CustomDateFormatter },
+        { provide: NgbDateAdapter, useClass: CustomNgbDateNativeUTCAdapter },
+    ]
+})
+export class SharedModule { }</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_server_side_logging"><a class="anchor" href="#_server_side_logging"></a>Server-Side Logging</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>Sqlite</code> database is used to store the errors and <code>Serilog.Sinks.Sqlite</code> library is used to log the errors.</p>
+</li>
+<li>
+<p>The initialization is done in the startup method.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">var builder = new ConfigurationBuilder()
+                    .SetBasePath(this.HostingEnvironment.ContentRootPath)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{this.HostingEnvironment.EnvironmentName}.json", optional: true)
+                    .AddEnvironmentVariables();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Build())
+    .CreateLogger();</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The <code>appsettings.json</code> file is where the details are configured.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "Serilog": {
+    "Using": [
+      "Serilog.Sinks.SQLite"
+    ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "Microsoft.Hosting.Lifetime": "Information",
+        "System": "Error"
+      }
+    },
+    "Enrich": [
+      "FromLogContext",
+      "WithMachineName",
+      "WithThreadId"
+    ],
+    "WriteTo": [
+      {
+        "Name": "SQLite",
+        "Args": {
+          "sqliteDbPath": "./logs/log.db",
+          "tableName": "Logs",
+          "storeTimestampInUtc": "true"
+        }
+      }
+    ]
+  }
+}</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references"><a class="anchor" href="#_references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-7.0" target="_blank" rel="noopener">Error Handling in AspNetCore</a></p>
+</li>
+<li>
+<p><a href="https://damienbod.com/2023/08/21/asp-net-core-logging-using-serilog-and-azure/" target="_blank" rel="noopener">AspNetCore logging with Serilog</a></p>
+</li>
+<li>
+<p><a href="https://github.com/saleem-mirza/serilog-sinks-sqlite" target="_blank" rel="noopener">Serilog Sinks Sqlite</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/lunr.js"></script>
+<script src="../../_/js/search-ui.js" id="search-ui-script" data-site-root-path="../.." data-snippet-length="100" data-stylesheet="../../_/css/search.css"></script>
+<script async src="../../search-index.js"></script>
+  </body>
+</html>

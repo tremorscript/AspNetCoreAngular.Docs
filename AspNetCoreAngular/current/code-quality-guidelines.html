@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Code Quality Guidelines :: AspNetCoreAngular Developer Documentation</title>
-    <link rel="canonical" href="https://tremorscript.com/homesite/current/code-quality-guidelines.html">
+    <link rel="canonical" href="https://tremorscript.com/AspNetCoreAngular/current/code-quality-guidelines.html">
     <meta name="generator" content="Antora 3.1.4">
     <link rel="stylesheet" href="../../_/css/site.css">
   </head>
@@ -15,7 +15,7 @@
       <a class="navbar-item" href="https://tremorscript.com">AspNetCoreAngular Developer Documentation</a>
       <div class="navbar-item search hide-for-print">
         <div id="search-field" class="field">
-          <input id="search-input" type="text" placeholder="Search the docs">
+          <input id="search-input" type="text" placeholder="Search the docs" >
         </div>
       </div>
       <button class="navbar-burger" data-target="topbar-nav">
@@ -27,43 +27,24 @@
     <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
         <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
-          </div>
-        </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
-          </div>
-        </div>
-        <div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" href="#">Download</a>
-          </span>
-        </div>
       </div>
     </div>
   </nav>
-</header>
-<div class="body">
-<div class="nav-container" data-component="homesite" data-version="1.0.0">
+</header><div class="body">
+<div class="nav-container" data-component="AspNetCoreAngular" data-version="1.0.0">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Home page</a></h3>
+    <h3 class="title"><a href="index.html">AspNetCoreAngular</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="getting-started.html">Getting Started</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="code-quality-guidelines.html">Code Quality Guidelines</a>
@@ -81,7 +62,7 @@
     <a class="nav-link" href="configuration-management.html">Configuration Management</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="error-handling.html">Error Handling</a>
+    <a class="nav-link" href="error-handling.html">Error Handling and Logging</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="internationalization.html">Internationalization</a>
@@ -120,12 +101,12 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Home page</span>
+    <span class="title">AspNetCoreAngular</span>
     <span class="version">1.0.0</span>
   </div>
   <ul class="components">
     <li class="component is-current">
-      <a class="title" href="index.html">Home page</a>
+      <a class="title" href="index.html">AspNetCoreAngular</a>
       <ul class="versions">
         <li class="version is-current is-latest">
           <a href="index.html">1.0.0</a>
@@ -143,7 +124,7 @@
   <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Home page</a></li>
+    <li><a href="index.html">AspNetCoreAngular</a></li>
     <li><a href="code-quality-guidelines.html">Code Quality Guidelines</a></li>
   </ul>
 </nav>
@@ -172,54 +153,21 @@
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_code_formatting"><a class="anchor" href="#_code_formatting"></a>Code Formatting</h3>
-<div class="paragraph">
-<p>The <code>.editorconfig</code> file is where the code formatting options are defined.</p>
-</div>
-<div class="paragraph">
-<p><a href="https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview#code-style-analysis" target="_blank" rel="noopener">Codestyle analyzers</a> use this file to analyze and fix the code.</p>
-</div>
-<div class="paragraph">
-<p><a href="https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/code-style-rule-options#example-editorconfig-file" target="_blank" rel="noopener">An example editorconfig file.</a></p>
-</div>
-<div class="paragraph">
-<p>The <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/.editorconfig" target="_blank" rel="noopener">.editorconfig</a> file used by the project.</p>
-</div>
-<div class="paragraph">
-<p>The <a href="https://github.com/dotnet/format"><code>dotnet format</code></a> tool helps format all the code in a solution or a project.</p>
-</div>
-<div class="paragraph">
-<p>The tool reads the preferences from the <code>.editorconfig</code> file.</p>
-</div>
-<div class="paragraph">
-<p>Example Usage 1:<br>
-<code>dotnet format analyzers .\AspNetCoreAngular.sln -v detailed</code><br>
-- executes third party analyzers and fixes the analyzer issues.</p>
-</div>
-<div class="paragraph">
-<p>Example Usage 2:<br>
-<code>dotnet format style .\AspNetCoreAngular.sln -v detailed</code><br>
-- executes the code style analyzers and fixes code style issues.</p>
-</div>
-<div class="paragraph">
-<p>Example Usage 3:<br>
-<code>dotnet format whitespace .\AspNetCoreAngular.sln -v detailed</code><br>
-- executes the code style analyzers and fixes whitespace.</p>
-</div>
-<div class="paragraph">
-<p>Example Usage 4:<br>
-<code>dotnet format .\AspNetCoreAngular.sln -v detailed</code><br>
-- runs all the previous 3 options.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_linters_and_analyzers"><a class="anchor" href="#_linters_and_analyzers"></a>Linters and Analyzers</h3>
-<div class="paragraph">
-<p>The project uses <a href="https://github.com/DotNetAnalyzers/StyleCopAnalyzers" target="_blank" rel="noopener">StyleCop Analyzers</a> and <a href="https://github.com/dotnet/roslyn-analyzers" target="_blank" rel="noopener">RoslynAnalyzers</a> to analyze the code for style, quality, and maintainability, design and other issues.</p>
-</div>
-<div class="paragraph">
+<h3 id="_formatters_linters_and_analyzers"><a class="anchor" href="#_formatters_linters_and_analyzers"></a>Formatters, Linters and Analyzers</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/code-style-rule-options#example-editorconfig-file" target="_blank" rel="noopener">.editorconfig</a>- The code formatting options used by VS Code, Visual Studio and Rider.</p>
+</li>
+<li>
+<p><a href="https://github.com/DotNetAnalyzers/StyleCopAnalyzers" target="_blank" rel="noopener">StyleCop Analyzers</a> and <a href="https://github.com/dotnet/roslyn-analyzers" target="_blank" rel="noopener">RoslynAnalyzers</a> - Analyze the code for style, quality, and maintainability, design and other issues.</p>
+</li>
+<li>
 <p>The <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/common.props" target="_blank" rel="noopener">common.props</a> file is where the analyzers are defined:-</p>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p></p>
 <div class="literalblock">
 <div class="content">
 <pre>&lt;Project&gt;
@@ -240,9 +188,12 @@
 &lt;/Project&gt;</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>The <code>csproj</code> files are where you can reference this to ensure a consistent setup.</p>
+</li>
+</ul>
 </div>
+</li>
+<li>
+<p>The <code>.csproj</code> files reference <code>.common.props</code> which ensures a consistent setup.</p>
 <div class="literalblock">
 <div class="content">
 <pre>&lt;Project Sdk="Microsoft.NET.Sdk.Web"&gt;
@@ -250,8 +201,49 @@
 &lt;/Project&gt;</pre>
 </div>
 </div>
-<div class="paragraph">
+</li>
+<li>
+<p>The <a href="https://github.com/dotnet/format"><code>dotnet format</code></a> tool helps format all the code in a solution or a project.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The tool reads the preferences from the <code>.editorconfig</code> and the <code>style.json</code> file.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>dotnet format analyzers .\AspNetCoreAngular.sln -v detailed</code> executes third party analyzers and fixes the analyzer issues.</p>
+</li>
+<li>
+<p><code>dotnet format style .\AspNetCoreAngular.sln -v detailed</code>- executes the code style analyzers and fixes code style issues.</p>
+</li>
+<li>
+<p><code>dotnet format whitespace .\AspNetCoreAngular.sln -v detailed</code>- executes the code style analyzers and fixes whitespace.</p>
+</li>
+<li>
+<p><code>dotnet format .\AspNetCoreAngular.sln -v detailed</code>- runs all the previous 3 options.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>The angular app uses <a href="https://github.com/angular-eslint/angular-eslint" target="_blank" rel="noopener">angular-eslint</a> for linting the typescript and html code.</p>
+</li>
+<li>
+<p>There is a <a href="https://github.com/typicode/husky" target="_blank" rel="noopener">husky</a> <a href="https://github.com/tremorscript/AspNetCoreAngular/blob/main/.husky/pre-commit" target="_blank" rel="noopener">pre-commit</a> file which executes the linters and analyzers before commiting the code.</p>
+<div class="literalblock">
+<div class="content">
+<pre>#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+dotnet format ./AspNetCoreAngular.sln -v detailed &amp;&amp; git add -A .
+cd ./src/Presentation/Web/ClientApp/ &amp;&amp; ng lint --fix &amp;&amp; git add -A .</pre>
+</div>
+</div>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -261,20 +253,20 @@
 <div class="ulist checklist">
 <ul class="checklist">
 <li>
-<p>Focus on:</p>
-<div class="ulist">
-<ul>
+<p><i class="fa fa-square-o"></i> Focus on:</p>
+<div class="ulist checklist">
+<ul class="checklist">
 <li>
-<p>Correctness of the business logic</p>
+<p><i class="fa fa-square-o"></i> Correctness of the business logic</p>
 </li>
 <li>
-<p>Correctness of the tests.</p>
+<p><i class="fa fa-square-o"></i> Correctness of the tests.</p>
 </li>
 <li>
-<p>Readability and maintainability of the code</p>
+<p><i class="fa fa-square-o"></i> Readability and maintainability of the code</p>
 </li>
 <li>
-<p>Readability and maintainability of the overall design decisions.</p>
+<p><i class="fa fa-square-o"></i> Readability and maintainability of the overall design decisions.</p>
 </li>
 </ul>
 </div>
@@ -534,6 +526,9 @@
 </li>
 <li>
 <p><a href="https://github.com/angular-eslint/angular-eslint" target="_blank" rel="noopener">angular-eslint</a></p>
+</li>
+<li>
+<p><a href="https://github.com/typicode/husky" target="_blank" rel="noopener">Husky</a></p>
 </li>
 </ul>
 </div>

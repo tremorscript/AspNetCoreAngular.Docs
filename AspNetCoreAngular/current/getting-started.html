@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Performance Testing :: AspNetCoreAngular Developer Documentation</title>
-    <link rel="canonical" href="https://tremorscript.com/homesite/current/unit-testing.html">
+    <title>Getting Started :: AspNetCoreAngular Developer Documentation</title>
+    <link rel="canonical" href="https://tremorscript.com/AspNetCoreAngular/current/getting-started.html">
     <meta name="generator" content="Antora 3.1.4">
     <link rel="stylesheet" href="../../_/css/site.css">
   </head>
@@ -15,7 +15,7 @@
       <a class="navbar-item" href="https://tremorscript.com">AspNetCoreAngular Developer Documentation</a>
       <div class="navbar-item search hide-for-print">
         <div id="search-field" class="field">
-          <input id="search-input" type="text" placeholder="Search the docs">
+          <input id="search-input" type="text" placeholder="Search the docs" >
         </div>
       </div>
       <button class="navbar-burger" data-target="topbar-nav">
@@ -27,43 +27,24 @@
     <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
         <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
-          </div>
-        </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
-          </div>
-        </div>
-        <div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" href="#">Download</a>
-          </span>
-        </div>
       </div>
     </div>
   </nav>
-</header>
-<div class="body">
-<div class="nav-container" data-component="homesite" data-version="1.0.0">
+</header><div class="body">
+<div class="nav-container" data-component="AspNetCoreAngular" data-version="1.0.0">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">Home page</a></h3>
+    <h3 class="title"><a href="index.html">AspNetCoreAngular</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Introduction</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="getting-started.html">Getting Started</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="code-quality-guidelines.html">Code Quality Guidelines</a>
@@ -81,12 +62,12 @@
     <a class="nav-link" href="configuration-management.html">Configuration Management</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="error-handling.html">Error Handling</a>
+    <a class="nav-link" href="error-handling.html">Error Handling and Logging</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="internationalization.html">Internationalization</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="unit-testing.html">Performance Testing</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -120,12 +101,12 @@
 </div>
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
-    <span class="title">Home page</span>
+    <span class="title">AspNetCoreAngular</span>
     <span class="version">1.0.0</span>
   </div>
   <ul class="components">
     <li class="component is-current">
-      <a class="title" href="index.html">Home page</a>
+      <a class="title" href="index.html">AspNetCoreAngular</a>
       <ul class="versions">
         <li class="version is-current is-latest">
           <a href="index.html">1.0.0</a>
@@ -143,20 +124,133 @@
   <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Home page</a></li>
-    <li><a href="unit-testing.html">Performance Testing</a></li>
+    <li><a href="index.html">AspNetCoreAngular</a></li>
+    <li><a href="getting-started.html">Getting Started</a></li>
   </ul>
 </nav>
-<div class="edit-this-page"><a href="https://github.com/tremorscript/AspNetCoreAngular.Docs/edit/main/modules/ROOT/pages/unit-testing.adoc">Edit this Page</a></div>
+<div class="edit-this-page"><a href="https://github.com/tremorscript/AspNetCoreAngular.Docs/edit/main/modules/ROOT/pages/getting-started.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
-<aside class="toc sidebar" data-title="Contents" data-levels="2">
+<aside class="toc sidebar" data-title="Contents" data-levels="4">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Performance Testing</h1>
+<h1 class="page">Getting Started</h1>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Clone the repo:</p>
 <div class="paragraph">
-<p>TBD</p>
+<p>git clone <a href="https://github.com/tremorscript/AspNetCoreAngular" target="_blank" rel="noopener">https://github.com/tremorscript/AspNetCoreAngular</a></p>
+</div>
+</li>
+<li>
+<p>Change directory;</p>
+<div class="paragraph">
+<p><code>cd AspNetCoreAngular</code></p>
+</div>
+</li>
+<li>
+<p>Update the local git config with a list of <a href="https://tremorscript.github.io/AspNetCoreAngular.Docs/homesite/current/pull-request-guidelines.html#_add_aliases_to_the_config_file_in_git" target="_blank" rel="noopener">aliases</a>.</p>
+</li>
+<li>
+<p>Restore packages: <code>dotnet restore AspNetCoreAngular.sln</code></p>
+</li>
+<li>
+<p>Install npm packages:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>cd src/Presentation/Web/ClientApp</code></p>
+</li>
+<li>
+<p><code>npm install</code></p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Start Frontend: <code>npm start</code></p>
+</li>
+<li>
+<p>Run Backend:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Using VSCode:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>If you are running for the first time, install dev certificates using the command:</p>
+<div class="paragraph">
+<p><code>dotnet dev-certs https --trust</code></p>
+</div>
+</li>
+<li>
+<p>From the Debug menu, select <code>Web</code> profile to run api application.</p>
+</li>
+<li>
+<p>From the Debug menu, select <code>STS</code> profile to run the Identity Server application.</p>
+</li>
+<li>
+<p>From the Debug menu, select <code>Firefox\Web\STS</code> profile to run the Angular application, the Api application and the Identity Server application, all at once.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Using Visual Studio IDE:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Run <code>Web</code> and STS projects either individually or by setting multiple projects in the Solutions properties and hit <code>F5</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Target either Sqlite or Microsoft SQL Server.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Project is already setup with Sqlite.</p>
+</li>
+<li>
+<p>For Microsoft Sql Server</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Delete the <code>Migrations</code> folder from <code>src/Infrastructure/Infrastructure/Persistence</code>.</p>
+</li>
+<li>
+<p>Change the settings in <code>appsettings.json</code> called <code>useSqlite</code> from <code>true</code> to <code>false</code> and change <code>Web</code> connection string to your local Sql Server connection string.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Once the project is running, use the following test users to login.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Username: <a href="mailto:admin@admin.com">admin@admin.com</a> Password: P@ssw0rd!</p>
+</li>
+<li>
+<p>Username: <a href="mailto:user@user.com">user@user.com</a> Password: P@ssw0rd!</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Note: For production use Identity server hosted with appropriate configuration.</p>
+</li>
+</ol>
 </div>
 </article>
   </div>
