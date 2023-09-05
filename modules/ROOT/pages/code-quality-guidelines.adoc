@@ -11,42 +11,15 @@
 * https://angular.io/guide/styleguide[Angular Coding Guidelines^]
 * https://learn.microsoft.com/en-us/dotnet/standard/security/secure-coding-guidelines[Secure Coding Guidelines^]
 
-=== Code Formatting
+=== Formatters, Linters and Analyzers
 
-The `.editorconfig` file is where the code formatting options are defined.
+* https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/code-style-rule-options#example-editorconfig-file[.editorconfig^]- The code formatting options used by VS Code, Visual Studio and Rider.
 
-https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview#code-style-analysis[Codestyle analyzers^] use this file to analyze and fix the code.
+* https://github.com/DotNetAnalyzers/StyleCopAnalyzers[StyleCop Analyzers^] and https://github.com/dotnet/roslyn-analyzers[RoslynAnalyzers^] - Analyze the code for style, quality, and maintainability, design and other issues.
 
-https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/code-style-rule-options#example-editorconfig-file[An example editorconfig file.^]
-
-The https://github.com/tremorscript/AspNetCoreAngular/blob/main/.editorconfig[.editorconfig^] file used by the project.
-
-The https://github.com/dotnet/format[`dotnet format`] tool helps format all the code in a solution or a project.
-
-The tool reads the preferences from the `.editorconfig` file.
-
-Example Usage 1: +
-`dotnet format analyzers .\AspNetCoreAngular.sln -v detailed` +
-- executes third party analyzers and fixes the analyzer issues.
-
-Example Usage 2: +
-`dotnet format style .\AspNetCoreAngular.sln -v detailed` +
-- executes the code style analyzers and fixes code style issues.
-
-Example Usage 3: +
-`dotnet format whitespace .\AspNetCoreAngular.sln -v detailed` +
-- executes the code style analyzers and fixes whitespace.
-
-Example Usage 4: +
-`dotnet format .\AspNetCoreAngular.sln -v detailed` +
-- runs all the previous 3 options.
-
-=== Linters and Analyzers
-
-The project uses https://github.com/DotNetAnalyzers/StyleCopAnalyzers[StyleCop Analyzers^] and https://github.com/dotnet/roslyn-analyzers[RoslynAnalyzers^] to analyze the code for style, quality, and maintainability, design and other issues.
-
-The https://github.com/tremorscript/AspNetCoreAngular/blob/main/common.props[common.props^] file is where the analyzers are defined:-
-
+* The https://github.com/tremorscript/AspNetCoreAngular/blob/main/common.props[common.props^] file is where the analyzers are defined:-
+** {empty}
++
 ....
 <Project>
   <PropertyGroup>
@@ -66,25 +39,43 @@ The https://github.com/tremorscript/AspNetCoreAngular/blob/main/common.props[com
 </Project>
 ....
 
-The `csproj` files are where you can reference this to ensure a consistent setup.
-
+* The `.csproj` files reference `.common.props` which ensures a consistent setup.
++
 ....
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <Import Project="..\common.props" />
 </Project>
 ....
 
-The angular app uses https://github.com/angular-eslint/angular-eslint[angular-eslint^] for linting the typescript and html code.
+* The https://github.com/dotnet/format[`dotnet format`] tool helps format all the code in a solution or a project.
+** The tool reads the preferences from the `.editorconfig` and the `style.json` file.
+*** `dotnet format analyzers .\AspNetCoreAngular.sln -v detailed` executes third party analyzers and fixes the analyzer issues.
+*** `dotnet format style .\AspNetCoreAngular.sln -v detailed`- executes the code style analyzers and fixes code style issues.
+*** `dotnet format whitespace .\AspNetCoreAngular.sln -v detailed`- executes the code style analyzers and fixes whitespace.
+*** `dotnet format .\AspNetCoreAngular.sln -v detailed`- runs all the previous 3 options.
+
+* The angular app uses https://github.com/angular-eslint/angular-eslint[angular-eslint^] for linting the typescript and html code.
+
+* There is a https://github.com/typicode/husky[husky^] https://github.com/tremorscript/AspNetCoreAngular/blob/main/.husky/pre-commit[pre-commit^] file which executes the linters and analyzers before commiting the code.
++
+....
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+dotnet format ./AspNetCoreAngular.sln -v detailed && git add -A .
+cd ./src/Presentation/Web/ClientApp/ && ng lint --fix && git add -A .
+....
+
 
 === Code Review Checklist
 
 ==== General Code Review Checklist
 
-* Focus on:
-** Correctness of the business logic
-** Correctness of the tests.
-** Readability and maintainability of the code
-** Readability and maintainability of the overall design decisions.
+* [ ] Focus on:
+** [ ] Correctness of the business logic
+** [ ] Correctness of the tests.
+** [ ] Readability and maintainability of the code
+** [ ] Readability and maintainability of the overall design decisions.
 * [ ] Read every line changed.
 * [ ] Run the PR if it aids in your understanding of the code.
 * [ ] Does the PR description make sense?
@@ -174,3 +165,4 @@ Occasionally, maybe before a release, perform a http://www.ganssle.com/inspectio
 * https://microsoft.github.io/code-with-engineering-playbook/code-reviews/recipes/javascript-and-typescript/[TypeScript Code Review Checklist^]
 * http://www.ganssle.com/inspections.pdf[Code Inspections^]
 * https://github.com/angular-eslint/angular-eslint[angular-eslint^]
+* https://github.com/typicode/husky[Husky^]
