@@ -6,8 +6,6 @@
 
 A pull request (PR) is a way to notify a task is finished and ready to be merged into the main working branch (source of truth).
 
-This is a guideline that the devs must follow when working with Pull Requests(PRs). 
-
 == Pull Request Best Practices
 
 * Keep the PR small
@@ -80,7 +78,6 @@ The project has a https://github.com/tremorscript/AspNetCoreAngular/blob/main/.g
 * Run the full test suite and ensure that all the tests pass.
 * If you have multiple commits, squash your commits to one commit. Use `git squash-commits`.
 * Commit your changes using a descriptive commit message that follows the xref:#_commit_message_guidelines[commit message guidelines].
-** `git commit -a` => `-a` will automatically `add` and `rm` edited files.
 * Push your branch to GitHub: `git publish-branch`.
 * Send a pull request to `main`.
 ** If changes are suggested then:
