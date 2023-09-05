@@ -1,0 +1,43 @@
+= Getting Started 
+:navtitle: Getting Started 
+:title: Getting Started 
+:page-toclevels: 4
+:source-language: bash
+
+. Clone the repo:
++
+git clone https://github.com/tremorscript/AspNetCoreAngular[https://github.com/tremorscript/AspNetCoreAngular^]
+
+. Change directory;
++
+`cd AspNetCoreAngular`
+
+. Update the local git config with a list of https://tremorscript.github.io/AspNetCoreAngular.Docs/homesite/current/pull-request-guidelines.html#_add_aliases_to_the_config_file_in_git[aliases^].
+
+. Restore packages: `dotnet restore AspNetCoreAngular.sln`
+
+. Install npm packages:
+.. `cd src/Presentation/Web/ClientApp`
+.. `npm install`
+
+. Start Frontend: `npm start`
+
+. Run Backend:
+** Using VSCode:
+*** If you are running for the first time, install dev certificates using the command:
++
+`dotnet dev-certs https --trust`
+*** From the Debug menu, select `Web` profile to run api application.
+*** From the Debug menu, select `STS` profile to run the Identity Server application.
+*** From the Debug menu, select `Firefox\Web\STS` profile to run the Angular application, the Api application and the Identity Server application, all at once.
+** Using Visual Studio IDE:
+*** Run `Web` and STS projects either individually or by setting multiple projects in the Solutions properties and hit `F5`.
+. Target either Sqlite or Microsoft SQL Server.
+** Project is already setup with Sqlite.
+** For Microsoft Sql Server
+*** Delete the `Migrations` folder from `src/Infrastructure/Infrastructure/Persistence`.
+*** Change the settings in `appsettings.json` called `useSqlite` from `true` to `false` and change `Web` connection string to your local Sql Server connection string.
+. Once the project is running, use the following test users to login.
+** Username: admin@admin.com Password: P@ssw0rd!
+** Username: user@user.com Password: P@ssw0rd!
+. Note: For production use Identity server hosted with appropriate configuration.
