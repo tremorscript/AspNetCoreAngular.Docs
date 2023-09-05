@@ -16,7 +16,9 @@ git clone https://github.com/tremorscript/AspNetCoreAngular[https://github.com/t
 
 . Restore packages: `dotnet restore AspNetCoreAngular.sln`
 
-. Install npm packages:
+. Install npm packages for commitlint and husky - `npm install`
+
+. Install npm packages for the angular project:
 .. `cd src/Presentation/Web/ClientApp`
 .. `npm install`
 
