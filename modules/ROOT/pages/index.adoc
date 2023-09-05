@@ -21,7 +21,7 @@ The repository is to be used as the starting point for any project in your organ
 * Best https://angular.io/docs/ts/latest/guide/style-guide.html[practices^] for Angular Code generation.
 * Angular application inspired from https://github.com/asadsahi/AspNetCoreSpa[asadsahi^] and https://github.com/gothinkster/realworld[gothinkster^].
 * Clean Architecture inspired from https://github.com/jasontaylordev/CleanArchitecture[Jason Taylor^] and https://github.com/ardalis/CleanArchitecture[Steve Smith^].
-* Unit Testing with https://facebook.github.io/jest/[Jest^].
+* Unit Testing with https://facebook.github.io/jest/[Jest^] and https://xunit.net/[xUnit^].
 * E2E Testing with https://playwright.dev/[Playwright^].
 * https://compodoc.github.io/compodoc/[Compodoc^] for angular documentation.
 * http://swagger.io/[Swagger^] as the Api explorer.
