@@ -94,7 +94,7 @@ services
 
 == The ClientApp(Angular) application
 
-There are two main actors involved:
+There are three main actors involved:
 
 . https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/services/interceptors/auth.interceptor.ts[AuthInterceptor.ts^]
 . https://github.com/tremorscript/AspNetCoreAngular/blob/main/src/Presentation/Web/ClientApp/src/app/shared/components/login/login.component.ts[login.component.ts]
