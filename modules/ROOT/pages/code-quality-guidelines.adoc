@@ -67,9 +67,9 @@ cd ./src/Presentation/Web/ClientApp/ && ng lint --fix && git add -A .
 ....
 
 
-=== Code Review Checklist
+== Code Review Checklist
 
-==== General Code Review Checklist
+=== General Code Review Checklist
 
 * [ ] Focus on:
 ** [ ] Correctness of the business logic
@@ -104,7 +104,7 @@ cd ./src/Presentation/Web/ClientApp/ && ng lint --fix && git add -A .
 * [ ] Make sure edge cases are handled as well.
 * [ ] Tests can be a great source to understand the changes. It can be astrategy to look at tests first to help you understand the changes better.
 
-==== C# Code Review Checklist
+=== C# Code Review Checklist
 
 * [ ] Are internal vs private vs public classes and methods used the right way?
 * [ ] Are auto property set and get used the right way? In a model without constructor and for deserialization, it is ok to have all accessible. For other classes usually a private set or internal set is better.
@@ -135,7 +135,7 @@ cd ./src/Presentation/Web/ClientApp/ && ng lint --fix && git add -A .
 * [ ] Is the use of #pragma fair?
 * [ ] Is package management being used (NuGet) instead of committing DLLs?
 
-==== Typescript Code Review Checklist
+=== Typescript Code Review Checklist
 
 * [ ] No warnings or errors after running prettier and ESLint.
 * [ ] Is `use strict;` used to reduce errors with undeclared variables.
@@ -153,7 +153,7 @@ cd ./src/Presentation/Web/ClientApp/ && ng lint --fix && git add -A .
 * [ ] Are promises correctly converted to observables?
 * [ ] Are observables correctly subscribed and unsubscribed in components.
 
-=== Code Inspections
+== Code Inspections
 
 Occasionally, maybe before a release, perform a http://www.ganssle.com/inspections.pdf[Code Inspections^] activity over the solution. 
 
