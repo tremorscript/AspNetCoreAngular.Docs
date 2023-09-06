@@ -364,16 +364,16 @@
 <div class="sect1">
 <h2 id="_steps_to_follow_while_creating_a_pull_requestpr"><a class="anchor" href="#_steps_to_follow_while_creating_a_pull_requestpr"></a>Steps to follow while creating a Pull Request(PR)</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>Checkout the main branch : <code>git checkout main</code>.</p>
+<p><code>git checkout main</code> - checkout main.</p>
 </li>
 <li>
-<p>Create a new git branch: <code>git checkout -b IssueNumber_description-text main</code>.</p>
+<p><code>git checkout -b IssueNumber_description-text main</code>- create a new git branch.</p>
 </li>
 <li>
-<p>Make a single commit - or an empty commit using <code>git commit -m "my message" --allow-empty</code>.</p>
+<p><code>git commit -m "my message" --allow-empty</code> - Make an empty commit.</p>
 </li>
 <li>
 <p>Create a Pull request with a <code>WIP</code> in the title.</p>
@@ -381,32 +381,31 @@
 <li>
 <p>Ensure PR is linked to Work Item.</p>
 </li>
-</ul>
+</ol>
 </div>
 <div class="sect2">
 <h3 id="_steps_before_submitting_a_pull_request_pr"><a class="anchor" href="#_steps_before_submitting_a_pull_request_pr"></a>Steps before Submitting a Pull Request (PR)</h3>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Run the full test suite and ensure that all the tests pass.</p>
 </li>
 <li>
-<p>If you have multiple commits, squash your commits to one commit. Use <code>git squash-commits</code>.</p>
+<p><code>git squash-commits</code> - squash your commits to one commit.</p>
 </li>
 <li>
-<p>Commit your changes using a descriptive commit message that follows the <a href="#_commit_message_guidelines">commit message guidelines</a>.</p>
+<p>Commit changes using a descriptive commit message that follows the <a href="#_commit_message_guidelines">commit message guidelines</a>.</p>
 </li>
 <li>
-<p>Push your branch to GitHub: <code>git publish-branch</code>.</p>
+<p><code>git publish-branch</code> - Push the branch to GitHub.</p>
 </li>
 <li>
 <p>Send a pull request to <code>main</code>.</p>
-<div class="ulist">
-<ul>
+</li>
 <li>
 <p>If changes are suggested then:</p>
-<div class="ulist">
-<ul>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Make the required updates.</p>
 </li>
@@ -414,22 +413,12 @@
 <p>Re-run the tests to ensure all the tests are still passing.</p>
 </li>
 <li>
-<p>Rebase your branch and force push to your GitHub repository (this will update the Pull Request):</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>git rebase main -i &amp;&amp; git push -f</code></p>
+<p><code>git rebase main -i &amp;&amp; git push -f</code> - Rebase your branch and force push to your GitHub repository (this will update the Pull Request)</p>
 </li>
-</ul>
+</ol>
 </div>
 </li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
+</ol>
 </div>
 </div>
 </div>
@@ -437,25 +426,21 @@
 <div class="sect1">
 <h2 id="_steps_after_merging_a_pull_request_pr"><a class="anchor" href="#_steps_after_merging_a_pull_request_pr"></a>Steps after merging a Pull Request (PR)</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>After your pull request is merged, you can safely delete your branch and
-pull the changes from the main (upstream) repository:</p>
-</div>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows: <code>git push origin --delete my-fix-branch</code>.</p>
+<p><code>git push origin --delete my-fix-branch</code> - Delete the remote branch on GitHub either through the GitHub web UI or your local shell.</p>
 </li>
 <li>
-<p>Check out the main branch: <code>git checkout main -f</code>.</p>
+<p><code>git checkout main -f</code>- Check out the main branch.</p>
 </li>
 <li>
-<p>Delete the local branch: <code>git branch -D my-fix-branch</code>.</p>
+<p><code>git branch -D my-fix-branch</code> - Delete the local branch.</p>
 </li>
 <li>
-<p>Update your local main branch with the latest: <code>git update-branch</code>.</p>
+<p><code>git update-branch</code> - Update your local main branch with the latest.</p>
 </li>
-</ul>
+</ol>
 </div>
 </div>
 </div>

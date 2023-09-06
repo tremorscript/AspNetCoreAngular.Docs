@@ -149,7 +149,25 @@
 <p>By specifying only those sources that you wish the browser to load content from, you can protect your visitors from a whole range of issues.</p>
 </div>
 <div class="paragraph">
-<p>These apply to only responses that return one of the following content-types:</p>
+<p>Here is a basic CSP response header:-</p>
+</div>
+<div class="paragraph">
+<p><code>Content-Security-Policy: script-src 'self'</code></p>
+</div>
+<div class="paragraph">
+<p>The <code>script-src</code> directive specifies the whitelist of sources that the browser may load scripts from.</p>
+</div>
+<div class="paragraph">
+<p><code>self</code> is a keyword which specifies the current domain.</p>
+</div>
+<div class="paragraph">
+<p>So the browser will only load script files from the current domain.</p>
+</div>
+<div class="paragraph">
+<p>There are other directives and keywords that can be used.</p>
+</div>
+<div class="paragraph">
+<p>These headers only apply to responses that return one of the following content-types:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -172,23 +190,87 @@
 <div class="paragraph">
 <p>Content Security Policy headers are added using the <code>SecurityHeaderMiddleWare</code> class.</p>
 </div>
-<div class="paragraph">
-<p><code>AddFrameOptionsDeny</code> - Adds X-Frame-Options DENY to all requests. The page cannot be displayed in a frame, regardless of the site attempting to do so.</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>AddFrameOptionsDeny</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Adds <code>X-Frame-Options: Deny</code> header to the response.</p>
+</li>
+<li>
+<p>The page cannot be displayed in a frame, regardless of the site attempting to do so.</p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p><code>AddXssProtectionBlock</code> - Adds X-XSS-Protection 1; mode=block to all requests. Enables XSS protections and instructs the user-agent to block the response in the event that script has been inserted from user input, instead of sanitizing.</p>
+</li>
+<li>
+<p><code>AddXssProtectionBlock</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Adds <code>X-XSS-Protection: 1; mode=block</code> header to the response.</p>
+</li>
+<li>
+<p>Enables XSS protections and instructs the user-agent to block the response in the event that script has been inserted from user input, instead of sanitizing.</p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p><code>AddContentTypeOptionsNoSniff</code> - Add X-Content-Type-Options nosniff to all requests. Disables content sniffing. Can be set to protect against MIME type confusion attacks.</p>
+</li>
+<li>
+<p><code>AddContentTypeOptionsNoSniff</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Adds <code>X-Content-Type-Options: nosniff</code> header to the response.</p>
+</li>
+<li>
+<p>Disables content sniffing.</p>
+</li>
+<li>
+<p>Can be set to protect against MIME type confusion attacks.</p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p><code>AddStrictTransportSecurityMaxAge</code> - Add Strict-Transport-Security max-age=maxAge to all requests. Tells the user-agent to cache the domain in the STS list for the number of seconds provided.</p>
+</li>
+<li>
+<p><code>AddStrictTransportSecurityMaxAge</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Adds <code>Strict-Transport-Security: max-age=31536000; includeSubDomains</code> header to the response.</p>
+</li>
+<li>
+<p>Tells the user-agent to cache the domain in the STS list for the number of seconds provided.</p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p><code>AddReferrerPolicyOriginWhenCrossOrigin</code> - The browser will send the full URL to requests to the same origin but only send the origin when requests are cross-origin.</p>
+</li>
+<li>
+<p><code>AddReferrerPolicyOriginWhenCrossOrigin</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Adds <code>Referrer-Policy: strict-origin-when-cross-origin</code> header to the response.</p>
+</li>
+<li>
+<p>The browser will send the full URL to requests to the same origin but only send the origin when requests are cross-origin.</p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p><code>RemoveServerHeader</code> - Removes the Server header from all responses.</p>
+</li>
+<li>
+<p><code>RemoveServerHeader</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Removes the Server header from all responses.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -207,13 +289,10 @@
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddDefaultSrc</code> - The default-src directive serves as a fallback for the other CSP fetch directives.</p>
+<p><code>AddDefaultSrc</code> - The <code>default-src</code> directive serves as a fallback for the other CSP fetch directives.</p>
 </li>
 <li>
-<p>Valid sources include &#8216;self&#8217;, &#8216;unsafe-inline&#8217;, &#8216;unsafe-eval&#8217;, &#8216;none&#8217;, scheme such as http:, or internet hosts by name or IP address, as well as an optional URL scheme and/or port number.</p>
-</li>
-<li>
-<p>The site’s address may include an optional leading wildcard (the asterisk character, &#8216;<em>’), and you may use a wildcard (again, ’</em>&#8217;) as the port number, indicating that all legal ports are valid for the source.</p>
+<p>Self - Allow sources from the origin from which the protected document is being served, including the same URL scheme and port number.</p>
 </li>
 </ul>
 </div>
@@ -228,7 +307,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddConnectSrc</code> - The &#8216;connect-src&#8217; directive restricts the URLs which can be loaded using script interfaces The APIs that are restricted are: <code>&lt;a&gt;</code>, <code>ping</code>, <code>Fetch</code>, <code>XMLHttpRequest</code>, <code>WebSocket</code>, and <code>EventSource</code>.</p>
+<p><code>AddConnectSrc</code> - The <code>connect-src</code> directive restricts the URLs which can be loaded using script interfaces The APIs that are restricted are: <code>&lt;a&gt;</code>, <code>ping</code>, <code>Fetch</code>, <code>XMLHttpRequest</code>, <code>WebSocket</code>, and <code>EventSource</code>.</p>
 </li>
 <li>
 <p><code>Self</code> - Allow sources from the origin from which the protected document is being served, including the same URL scheme and port number.</p>
@@ -252,7 +331,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddFontSrc</code> - The font-src directive specifies valid sources for fonts loaded using @font-face.</p>
+<p><code>AddFontSrc</code> - The <code>font-src</code> directive specifies valid sources for fonts loaded using @font-face.</p>
 </li>
 <li>
 <p><code>Self</code> - Allow sources from the origin from which the protected document is being served, including the same URL scheme and port number.</p>
@@ -287,7 +366,7 @@ This is insecure; an attacker can also inject arbitrary data. Use this sparingly
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddObjectSrc</code> - The object-src directive specifies valid sources for the <code>&lt;object&gt;</code>, <code>&lt;embed&gt;</code>, and <code>&lt;applet&gt;</code> elements.</p>
+<p><code>AddObjectSrc</code> - The <code>object-src</code> directive specifies valid sources for the <code>&lt;object&gt;</code>, <code>&lt;embed&gt;</code>, and <code>&lt;applet&gt;</code> elements.</p>
 </li>
 <li>
 <p><code>None</code> - Block the resource (Refers to the empty set; that is, no URLs match)</p>
@@ -307,7 +386,7 @@ This is insecure; an attacker can also inject arbitrary data. Use this sparingly
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddFormAction</code> - The font-src directive specifies valid sources for fonts loaded using @font-face.</p>
+<p><code>AddFormAction</code> - The <code>font-src</code> directive specifies valid sources for fonts loaded using @font-face.</p>
 </li>
 <li>
 <p><code>Self</code> - Allow sources from the origin from which the protected document is being served, including the same URL scheme and port number.</p>
@@ -328,7 +407,7 @@ This is insecure; an attacker can also inject arbitrary data. Use this sparingly
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddImgSrc</code> - he img-src directive specifies valid sources of images and favicons.</p>
+<p><code>AddImgSrc</code> - The <code>img-src</code> directive specifies valid sources of images and favicons.</p>
 </li>
 <li>
 <p><code>Self</code> - Allow sources from the origin from which the protected document is being served, including the same URL scheme and port number.</p>
@@ -355,10 +434,8 @@ This is insecure; an attacker can also inject arbitrary data: URIs. Use this spa
 <p></p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp"> builder.AddCustomDirective(
-                        "script-src",
-                        "'self' 'unsafe-inline' 'unsafe-eval'");
-                    builder.AddCustomDirective("style-src", "'self' 'unsafe-inline' 'unsafe-eval'");
+<pre class="highlightjs highlight"><code class="language-csharp hljs" data-lang="csharp">builder.AddCustomDirective("script-src","'self' 'unsafe-inline' 'unsafe-eval'");
+builder.AddCustomDirective("style-src", "'self' 'unsafe-inline' 'unsafe-eval'");
 builder.AddCustomDirective("style-src", "'self' 'unsafe-inline' 'unsafe-eval'");</code></pre>
 </div>
 </div>
@@ -416,7 +493,7 @@ This source is insecure - you should not use this directive if at all possible.
 <div class="ulist">
 <ul>
 <li>
-<p>The upgrade-insecure-requests directive instructs user agents to treat all of a site’s insecure URLs (those served over HTTP) as though they have been replaced with secure URLs (those served over HTTPS).</p>
+<p>The <code>upgrade-insecure-requests</code> directive instructs user agents to treat all of a site’s insecure URLs (those served over HTTP) as though they have been replaced with secure URLs (those served over HTTPS).</p>
 </li>
 <li>
 <p>This directive is intended for websites with large numbers of insecure legacy URLs that need to be rewritten.</p>
@@ -434,7 +511,7 @@ This source is insecure - you should not use this directive if at all possible.
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddMediaSrc</code> - The media-src directive specifies valid sources for loading media using the <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code> elements.</p>
+<p><code>AddMediaSrc</code> - The <code>media-src</code> directive specifies valid sources for loading media using the <code>&lt;audio&gt;</code> and <code>&lt;video&gt;</code> elements.</p>
 </li>
 <li>
 <p><code>Self</code> - Allow sources from the origin from which the protected document is being served, including the same URL scheme and port number.</p>
@@ -452,10 +529,10 @@ This source is insecure - you should not use this directive if at all possible.
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddFrameAncestors</code> - The frame-ancestors directive specifies valid parents that may embed a page using <code>&lt;frame&gt;</code>, <code>&lt;iframe&gt;</code>, <code>&lt;object&gt;</code>, <code>&lt;embed&gt;</code>, or <code>&lt;applet&gt;</code>.</p>
+<p><code>AddFrameAncestors</code> - The <code>frame-ancestors</code> directive specifies valid parents that may embed a page using <code>&lt;frame&gt;</code>, <code>&lt;iframe&gt;</code>, <code>&lt;object&gt;</code>, <code>&lt;embed&gt;</code>, or <code>&lt;applet&gt;</code>.</p>
 </li>
 <li>
-<p>Setting this directive to &#8216;none&#8217; is similar to X-Frame-Options: DENY (which is also supported in older browsers).</p>
+<p>Setting this directive to <code>none</code> is similar to <code>X-Frame-Options: DENY</code> (which is also supported in older browsers).</p>
 </li>
 </ul>
 </div>
@@ -470,7 +547,7 @@ This source is insecure - you should not use this directive if at all possible.
 <div class="ulist">
 <ul>
 <li>
-<p><code>AddFrameSrc</code> - The frame-src directive specifies valid sources for nested browsing contexts loading using elements such as <code>&lt;frame&gt;</code> and <code>&lt;iframe&gt;</code>.</p>
+<p><code>AddFrameSrc</code> - The <code>frame-src</code> directive specifies valid sources for nested browsing contexts loading using elements such as <code>&lt;frame&gt;</code> and <code>&lt;iframe&gt;</code>.</p>
 </li>
 <li>
 <p><code>From</code> - Allow resources from the given uri. May be any non-empty value.</p>
@@ -488,19 +565,16 @@ This source is insecure - you should not use this directive if at all possible.
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/andrewlock/NetEscapades.AspNetCore.SecurityHeaders">NetEscapades.AspNetCore.SecurityHeaders</a></p>
+<p><a href="https://github.com/andrewlock/NetEscapades.AspNetCore.SecurityHeaders" target="_blank" rel="noopener">NetEscapades.AspNetCore.SecurityHeaders</a></p>
 </li>
 <li>
-<p><a href="https://scotthelme.co.uk/content-security-policy-an-introduction/">Content
-Security Policy</a></p>
+<p><a href="https://scotthelme.co.uk/content-security-policy-an-introduction/" target="_blank" rel="noopener">Content Security Policy</a></p>
 </li>
 <li>
-<p><a href="https://scotthelme.co.uk/csp-cheat-sheet/?ref=scotthelme.co.uk">CSP
-Cheatsheet</a></p>
+<p><a href="https://scotthelme.co.uk/csp-cheat-sheet/?ref=scotthelme.co.uk" target="_blank" rel="noopener">CSP Cheatsheet</a></p>
 </li>
 <li>
-<p><a href="https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/">Permissions
-Policy</a></p>
+<p><a href="https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/" target="_blank" rel="noopener">Permissions Policy</a></p>
 </li>
 </ul>
 </div>
